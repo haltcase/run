@@ -56,7 +56,6 @@
 		"zod-validation-error": "^3.4.0"
 	},
 	"devDependencies": {
-		"@haltcase/run": "file:.",
 		"@haltcase/style": "^6.2.1",
 		"@types/node": "^22.8.6",
 		"eslint": "^8.57.1",

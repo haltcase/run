@@ -29,9 +29,6 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0(zod@3.23.8)
     devDependencies:
-      "@haltcase/run":
-        specifier: file:.
-        version: "file:"
       "@haltcase/style":
         specifier: ^6.2.1
         version: 6.2.1(eslint@8.57.1)(prettier@3.3.3)(stylelint@16.10.0(typescript@5.6.3))(typescript@5.6.3)
@@ -480,11 +477,6 @@ packages:
         integrity: sha512-PPYtcLzhSafdylp8NBOxMCYIcLqTUMNiQc7ciBoAIvxNG2egM+P7e2nNPui5+Svyk89Q+Tnbrp139ZRIIBw3IA==
       }
     engines: { node: ">=v16" }
-
-  "@haltcase/run@file:":
-    resolution: { directory: "", type: directory }
-    engines: { node: ">=20" }
-    hasBin: true
 
   "@haltcase/style@6.2.1":
     resolution:
@@ -4829,18 +4821,6 @@ snapshots:
   "@favware/colorette-spinner@1.0.1":
     dependencies:
       colorette: 2.0.20
-
-  "@haltcase/run@file:":
-    dependencies:
-      "@favware/colorette-spinner": 1.0.1
-      "@isaacs/cliui": 8.0.2
-      c12: 2.0.1
-      colorette: 2.0.20
-      execa: 9.5.1
-      zod: 3.23.8
-      zod-validation-error: 3.4.0(zod@3.23.8)
-    transitivePeerDependencies:
-      - magicast
 
   "@haltcase/style@6.2.1(eslint@8.57.1)(prettier@3.3.3)(stylelint@16.10.0(typescript@5.6.3))(typescript@5.6.3)":
     dependencies:
