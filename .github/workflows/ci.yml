@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  code-quality:
+    name: Code quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check formatting (Prettier)
+        run: pnpm prettier:check
+
+      - name: Check types (TypeScript)
+        run: pnpm typescript:check
+
+      - name: Check linting (ESLint)
+        run: pnpm eslint:check

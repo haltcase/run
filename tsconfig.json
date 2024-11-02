@@ -1,0 +1,10 @@
+{
+	"extends": "@haltcase/style/typescript/node",
+	"compilerOptions": {
+		"module": "esnext",
+		"moduleResolution": "node",
+		"noEmit": true
+	},
+	"exclude": ["node_modules"],
+	"include": ["**/*.ts", "**/*.js", "**/*.mjs", ".*.js", ".eslintrc.cjs"]
+}
