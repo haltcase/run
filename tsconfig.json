@@ -6,5 +6,5 @@
 		"noEmit": true
 	},
 	"exclude": ["node_modules"],
-	"include": ["**/*.ts", "**/*.js", "**/*.mjs", ".*.js", ".eslintrc.cjs"]
+	"include": ["src/**/*.ts", ".eslintrc.cjs"]
 }

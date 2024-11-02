@@ -25,6 +25,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # this is necessary for typechecking the scripts folder
+      - name: Build and self-link
+        run: pnpm build && pnpm link .
+
       - name: Check formatting (Prettier)
         run: pnpm prettier:check
 
