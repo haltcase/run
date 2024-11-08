@@ -26,7 +26,7 @@ const zodMessageBuilder: MessageBuilder = (issues) =>
 			}
 
 			const optionText =
-				propertyName === "_" ? "Positionals" : `--{propertyName}`;
+				propertyName === "_" ? "Positionals" : `--${propertyName}`;
 
 			// we currently assume there is only ever one path segment
 			return `${red(optionText)}: ${issue.message}`;
