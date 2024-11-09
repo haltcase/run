@@ -40,3 +40,13 @@ test("parseOptions: returns everything after terminator as positionals", () => {
 		}
 	`);
 });
+
+test("parseOptions: use of reserved option names throws error", () => {
+	expect(() => {
+		parseOptions(["--env", "development"]);
+	}).toThrow("Reserved name 'env' cannot be used as option");
+
+	expect(() => {
+		parseOptions(["--_", "development"]);
+	}).toThrow("Reserved name '_' cannot be used as option");
+});
