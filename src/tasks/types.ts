@@ -60,8 +60,6 @@ export interface SchemaDefaults {
 	env: z.ZodObject<Record<string, z.ZodOptional<z.ZodString>>>;
 }
 
-// export type ExpectShape = DefaultShape & CustomShape;
-
 export type DefaultOptionsInput = ParsedOptions & {
 	env: Record<string, string | undefined>;
 };
