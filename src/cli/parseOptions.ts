@@ -5,6 +5,8 @@ export interface ParsedOptions {
 	[key: string]: unknown;
 }
 
+export const reservedNames = new Set(["_", "env"]);
+
 /**
  * Wrapper around Node's {@link parseArgs} that treats options as strings
  * by default, instead of boolean flags.
@@ -33,6 +35,12 @@ export const parseOptions = (args: string[]): ParsedOptions => {
 		}
 
 		if (token.kind === "option") {
+			if (reservedNames.has(token.name)) {
+				throw new Error(
+					`Reserved name '${token.name}' cannot be used as option`
+				);
+			}
+
 			if (index + 1 < tokens.length) {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				const next = tokens[index + 1]!;

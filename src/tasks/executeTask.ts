@@ -44,7 +44,12 @@ export const executeTask = async (
 	}
 
 	try {
-		await taskFunction(options, taskUtilities);
+		const optionsWithEnvironment = {
+			...options,
+			env: process.env
+		};
+
+		await taskFunction(optionsWithEnvironment, taskUtilities);
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
 

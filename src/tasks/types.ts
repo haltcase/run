@@ -44,29 +44,48 @@ export interface TaskUtilities {
 	}>;
 }
 
-export interface ExpectShape {
-	_: z.ZodArray<z.ZodTypeAny>;
+export type CustomShape = Record<string, z.ZodTypeAny>;
+
+// allow `any` type here which allows type inference to work
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface SchemaInput {
+	_: z.ZodType<any, z.ZodTypeDef, string[]>;
+	env: z.ZodType<any, z.ZodTypeDef, Record<string, string | undefined>>;
 	[key: string]: z.ZodTypeAny;
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export interface SchemaDefaults {
+	_: z.ZodArray<z.ZodString>;
+	env: z.ZodObject<Record<string, z.ZodOptional<z.ZodString>>>;
+}
+
+// export type ExpectShape = DefaultShape & CustomShape;
+
+export type DefaultOptionsInput = ParsedOptions & {
+	env: Record<string, string | undefined>;
+};
 
 export type TaskCollection = Partial<Record<string, Task>>;
 
-export type Task<TOptions = ParsedOptions> = (
+export type Task<TOptions = DefaultOptionsInput> = (
 	options: TOptions,
 	utilities: TaskUtilities
 ) => unknown;
 
-export type BrandedTaskStrict<TOptions = ParsedOptions> = Task<TOptions> & {
-	kind: "strictTask";
-	inputSchema: ExpectShape;
-	schema: z.ZodType<TOptions>;
-};
+export type BrandedTaskStrict<TOptions = DefaultOptionsInput> =
+	Task<TOptions> & {
+		kind: "strictTask";
+		inputSchema: Partial<SchemaInput>;
+		schema: z.ZodType<TOptions>;
+	};
 
-export type BrandedTaskLoose<TOptions = ParsedOptions> = Task<TOptions> & {
-	kind: "task";
-	schema: never;
-};
+export type BrandedTaskLoose<TOptions = DefaultOptionsInput> =
+	Task<TOptions> & {
+		kind: "task";
+		schema: never;
+	};
 
-export type BrandedTask<TOptions = ParsedOptions> =
+export type BrandedTask<TOptions = DefaultOptionsInput> =
 	| BrandedTaskLoose<TOptions>
 	| BrandedTaskStrict<TOptions>;

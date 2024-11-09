@@ -3,11 +3,13 @@ import { z } from "zod";
 import type { MessageBuilder } from "zod-validation-error";
 import { fromZodError } from "zod-validation-error";
 
-import type { ParsedOptions } from "../cli/parseOptions.js";
+import type { Defined, Merge } from "../util/types.js";
 import type {
 	BrandedTask,
 	BrandedTaskStrict,
-	ExpectShape,
+	DefaultOptionsInput,
+	SchemaDefaults,
+	SchemaInput,
 	Task
 } from "./types.js";
 
@@ -25,6 +27,11 @@ const zodMessageBuilder: MessageBuilder = (issues) =>
 				return issue.message;
 			}
 
+			if (propertyName === "env") {
+				const prefix = red(`Environment variable '${issue.path[1]}'`);
+				return `${prefix}: ${issue.message}`;
+			}
+
 			const optionText =
 				propertyName === "_" ? "Positionals" : `--${propertyName}`;
 
@@ -33,21 +40,31 @@ const zodMessageBuilder: MessageBuilder = (issues) =>
 		})
 		.join("\n");
 
-export const task = <T = ParsedOptions>(fn: Task<T>): BrandedTask<T> => {
+export const task = <T = DefaultOptionsInput>(fn: Task<T>): BrandedTask<T> => {
 	(fn as BrandedTask<T>).kind = "task";
 	return fn as BrandedTask<T>;
 };
 
 task.strict = <
-	TShape extends ExpectShape,
-	TSchema extends z.ZodObject<TShape> = z.ZodObject<TShape>
+	TShape extends Partial<SchemaInput>,
+	TSchema extends z.ZodObject<
+		Merge<SchemaDefaults, Defined<TShape>>
+	> = z.ZodObject<Merge<SchemaDefaults, Defined<TShape>>>
 >(
 	shape: TShape,
-	fn: Task<z.infer<TSchema>>
-): BrandedTask<z.infer<TSchema>> => {
-	const schema = z.strictObject(shape);
+	fn: Task<z.input<TSchema>>
+): BrandedTaskStrict<z.input<TSchema>> => {
+	const defaultValidators = {
+		_: z.string().array(),
+		env: z.object({}).passthrough()
+	};
 
-	const taskFunction: BrandedTaskStrict<z.infer<TSchema>> = (
+	const schema = z.strictObject({
+		...defaultValidators,
+		...(shape as Defined<TShape>)
+	});
+
+	const taskFunction: BrandedTaskStrict<z.input<TSchema>> = (
 		options,
 		utilities
 	) => {
