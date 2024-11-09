@@ -5,7 +5,7 @@ import { SUPPORTED_EXTENSIONS } from "c12";
 
 import type { MainContext } from "../cli/main.js";
 
-const extensions = SUPPORTED_EXTENSIONS.filter(
+export const extensions = SUPPORTED_EXTENSIONS.filter(
 	(extension) => extension.endsWith("js") || extension.endsWith("ts")
 );
 

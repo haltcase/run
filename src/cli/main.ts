@@ -36,7 +36,13 @@ export const main = async (props: MainProps) => {
 	const taskName = process.argv[3] ?? "";
 
 	if (!inputFileName) {
-		props.handler.help({ command: "help" });
+		props.handler.write(
+			props.handler.help({
+				taskFileList: true,
+				config
+			})
+		);
+
 		props.handler.failWith("Task file name is required");
 	}
 

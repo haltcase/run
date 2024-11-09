@@ -1,8 +1,13 @@
+import { readdirSync } from "node:fs";
+import { extname } from "node:path";
+
 import { Spinner } from "@favware/colorette-spinner";
 import cliui from "@isaacs/cliui";
 import { bold, yellow } from "colorette";
 
+import type { AppConfig } from "../config.js";
 import { isBrandedTask } from "../tasks/guards.js";
+import { extensions } from "../util/resolveTaskFile.js";
 import type { MainContextWithData } from "./main.js";
 
 export const failWith = (spinner: Spinner, message: unknown): never => {
@@ -27,20 +32,39 @@ export const write = (message: string) => {
 	process.stdout.write(`${message}\n`);
 };
 
-const usage = `Usage: ${yellow("hr")} <action> [task]`;
+const usage = `Usage: ${yellow("hr")} <taskFile> [task]`;
 
 interface HelpContextCommand {
 	command: string;
+}
+
+interface HelpContextFile {
+	taskFileList: true;
+	config: AppConfig;
 }
 
 interface HelpContextScript extends MainContextWithData {
 	taskList: true;
 }
 
-type HelpContext = HelpContextCommand | HelpContextScript;
+type HelpContext = HelpContextCommand | HelpContextFile | HelpContextScript;
 
 export const commandHandler = (_context: HelpContextCommand): string => {
 	return usage;
+};
+
+export const taskFileListHandler = (context: HelpContextFile): string => {
+	const fileList = readdirSync(context.config.taskDirectory).filter((file) =>
+		extensions.includes(extname(file) as (typeof extensions)[number])
+	);
+
+	const content = [
+		usage,
+		"Available task files:",
+		fileList.map((it) => `  ${it}`).join("\n")
+	].join("\n\n");
+
+	return `${content}\n`;
 };
 
 export const taskListHandler = (context: HelpContextScript): string => {
@@ -93,6 +117,10 @@ export const taskListHandler = (context: HelpContextScript): string => {
 export const help = (context: HelpContext): string => {
 	if ("command" in context) {
 		return commandHandler(context);
+	}
+
+	if ("taskFileList" in context) {
+		return taskFileListHandler(context);
 	}
 
 	if ("taskList" in context) {
