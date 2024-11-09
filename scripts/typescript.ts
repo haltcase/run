@@ -35,9 +35,26 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 	);
 });
 
+export const test = task.strict(
+	{
+		_: z
+			.string()
+			.array()
+			.transform((values) => values.length),
+		env: z
+			.object({
+				SHELL: z.string()
+			})
+			.transform((object) => ({ ...object })),
+		foo: z.string()
+	},
+	async ({ _, env }) => {
+		console.log(_, env.SHELL);
+	}
+);
+
 export const printCharacter = task.strict(
 	{
-		_: z.array(z.string()),
 		name: z.string(),
 		armorClass: z.coerce.number(),
 		flag: z.string().transform((value) => value === "true")
