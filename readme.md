@@ -160,6 +160,45 @@ pnpm hr greetings hello --name World -- --ThisIsNotAnOption
 # → Hello, World! --ThisIsNotAnOption
 ```
 
+### Environment variables
+
+Tasks also receive environment variables as the `env` property:
+
+```js
+// scripts/greetings.ts
+
+export const hello = ({ env, name }) => {
+	if (env.GREET_LOUDLY) {
+		console.log(`HELLO, ${name.toUpperCase()}! LOUD GREETINGS TO YOU.`);
+	} else {
+		console.log(`Hello, ${name}. Quiet greetings to you.`);
+	}
+};
+```
+
+Example using `sh` syntax to set an environment variable for a command:
+
+```shell
+pnpm hr greetings hello --name World
+# → Hello, World. Quiet greetings to you.
+
+GREET_LOUDLY=true pnpm hr greetings hello --name World
+# → HELLO, WORLD! LOUD GREETINGS TO YOU.
+```
+
+You can also use other typical methods for loading an environment, including
+`dotenv-cli`:
+
+```shell
+dotenv -c development -- pnpm hr greetings hello --name World
+# → HELLO, WORLD! LOUD GREETINGS TO YOU.
+```
+
+By default, `env` is a full reference to Node's `process.env` and is a fairly
+loose dictionary from string keys to values that are `string | undefined`. If
+you want to validate specific environment variables, use
+[`task.strict`](#taskstrict).
+
 ### Shell execution
 
 Each task additionally receives a second argument, giving you access to shell
@@ -333,6 +372,8 @@ export const printCharacter = task.strict(
 	{
 		// positional/unnamed arguments
 		_: z.array(z.string()),
+		// environment variables
+		env: z.object({}).passthrough(),
 		name: z.string(),
 		armorClass: z.coerce.number()
 	},
@@ -343,7 +384,39 @@ export const printCharacter = task.strict(
 ```
 
 This also allows you to parse, validate, and safely type the `_` property
-beyond an array of strings.
+beyond an array of strings and the `env` property more strictly than a simple
+reference to Node's `process.env`. For instance:
+
+```ts
+// scripts/extra.ts
+
+import { task } from "@haltcase/run";
+import { z } from "zod";
+
+export const fun = task.strict(
+	{
+		_: z.array(z.string()).transform((values) => values.length),
+		// note: `z.object` strips unspecified keys by default
+		env: z.object({
+			SECRET_KEY: z.string().min(8)
+		})
+	},
+	async ({ _, env }) => {
+		console.log(`Positionals count (_) = ${_}`);
+		console.log(`SECRET_KEY = ${env.SECRET_KEY}`);
+	}
+);
+```
+
+```shell
+pnpm hr extra fun because there are more words
+# → 5
+# → undefined
+
+SECRET_KEY=abcdefgh pnpm hr extra fun because there are more words
+# → 5
+# → abcdefgh
+```
 
 [execa]: https://github.com/sindresorhus/execa#readme
 [execascript]: https://github.com/sindresorhus/execa/blob/main/docs/scripts.md
