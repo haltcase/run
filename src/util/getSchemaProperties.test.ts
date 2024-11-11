@@ -25,3 +25,20 @@ test("getSchemaProperties: wraps optional parameter names with []", () => {
 		)
 	).toBe("{ optionName, [maybeFlag] }");
 });
+
+test("getSchemaProperties: `_` and `env` are not listed", () => {
+	expect(
+		getSchemaProperties(
+			z.object({
+				_: z.string().array(),
+				env: z.object({
+					SOME_FLAG: z
+						.string()
+						.transform((value) => value.toLowerCase() === "true")
+				}),
+				optionName: z.string(),
+				maybeFlag: z.boolean().optional()
+			})
+		)
+	).toBe("{ optionName, [maybeFlag] }");
+});
