@@ -35,7 +35,7 @@
 		"build": "tsc -p tsconfig.build.json",
 		"build:watch": "tsc -p tsconfig.build.json --watch",
 		"eslint:check": "eslint src",
-		"format": "prettier src --write && eslint --fix src",
+		"format": "eslint --fix src && prettier src --write",
 		"prepack": "pnpm run build",
 		"prepare": "husky",
 		"prettier:check": "prettier --check src",
