@@ -68,6 +68,12 @@ export const main = async (props: MainProps) => {
 		]);
 	}
 
+	// update context with the fully resolved file path
+	context.taskFile = {
+		...parse(resolutions),
+		path: resolutions
+	};
+
 	const taskFileResult = await loadTaskFile(context);
 
 	if (!taskFileResult.ok) {

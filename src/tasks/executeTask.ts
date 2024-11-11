@@ -1,5 +1,3 @@
-import { join } from "node:path";
-
 import { $, execa } from "execa";
 
 import type { MainContextWithData } from "../cli/main.js";
@@ -38,8 +36,8 @@ export const executeTask = async (
 		}
 
 		context.handler.failWith([
-			`Task file '${context.taskFile.base}' does not export '${context.taskName}'`,
-			`Resolved to: ${join(context.taskFile.dir, context.taskFile.base)}`
+			`Task file '${context.taskFile.name}' does not export '${context.taskName}'`,
+			`Resolved to: ${context.taskFile.path}`
 		]);
 	}
 
