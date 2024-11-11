@@ -133,3 +133,37 @@ test("task.strict: validates options with the given schema", () => {
 		);
 	}).toThrow(`${red("--logLevel")}: Number must be greater than 0`);
 });
+
+test("task.strict: exposes the given schema and its input properties", () => {
+	const fn = task.strict(
+		{
+			startDate: z.string().date(),
+			logLevel: z.number().positive().default(6)
+		},
+		({ logLevel }) => logLevel
+	);
+
+	expect(
+		fn.schema.safeParse({
+			_: [],
+			env: {},
+			startDate: "2532-10-10"
+		}).data
+	).toMatchObject({
+		_: [],
+		env: {},
+		startDate: "2532-10-10",
+		logLevel: 6
+	});
+
+	expect(fn.inputSchema.logLevel.safeParse(5).data).toBe(5);
+	expect(fn.inputSchema.logLevel.safeParse().data).toBe(6);
+
+	expect(() => {
+		fn.inputSchema.startDate.parse("1970-01-01");
+	}).not.toThrow();
+
+	expect(() => {
+		fn.inputSchema.startDate.parse("not a data string");
+	}).toThrow();
+});

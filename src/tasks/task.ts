@@ -52,7 +52,7 @@ task.strict = <
 	> = z.ZodObject<Merge<SchemaDefaults, Defined<TShape>>>
 >(
 	shape: TShape,
-	fn: Task<z.input<TSchema>>
+	fn: Task<z.infer<TSchema>>
 ): BrandedTaskStrict<z.input<TSchema>> => {
 	const defaultValidators = {
 		_: z.string().array(),
