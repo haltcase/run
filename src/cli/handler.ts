@@ -75,42 +75,66 @@ export const taskListHandler = (context: HelpContextScript): string => {
 	});
 
 	const { config } = context.taskFile.data;
-	const taskInfo = Object.entries(config)
-		.map(([name, value]) => {
-			if (!value) {
-				return "";
-			}
 
-			const formattedName = bold(name);
+	const baseUsage = usage.replace("<action>", context.taskFile.name);
 
-			if (isBrandedTask(value)) {
-				if (value.kind === "strictTask") {
-					const properties = getSchemaProperties(value.schema);
-					const { description = "" } = value.schema;
-
-					return [formattedName, properties, description]
-						.filter(Boolean)
-						.join("\t");
-				}
-
-				return formattedName;
-			}
-
-			return formattedName;
-		})
-		.join("\n");
-
-	ui.div(usage.replace("<action>", context.taskFile.name));
+	ui.div(`${baseUsage} <parameter> [...options]`);
 
 	ui.div({
 		text: "Available tasks:",
 		padding: [1, 0, 1, 0]
 	});
 
-	ui.div({
-		text: taskInfo,
-		padding: [0, 2, 1, 2]
-	});
+	const taskListPaddingX = 2;
+	const nameColumnWidth =
+		Object.keys(config).reduce(
+			(previous, current) => Math.max(previous, current.length),
+			1
+		) +
+		2 +
+		taskListPaddingX * 2;
+
+	for (const [name, value] of Object.entries(config)) {
+		if (!value) {
+			continue;
+		}
+
+		const formattedName = bold(name);
+
+		if (isBrandedTask(value)) {
+			if (value.kind === "strictTask") {
+				const properties = getSchemaProperties(value.schema);
+				const { description = "" } = value.schema;
+
+				ui.div(
+					{
+						text: formattedName,
+						width: nameColumnWidth,
+						padding: [0, taskListPaddingX, 0, taskListPaddingX]
+					},
+					...[properties, description].filter(Boolean)
+				);
+
+				continue;
+			}
+
+			ui.div({
+				text: formattedName,
+				width: nameColumnWidth,
+				padding: [0, taskListPaddingX, 0, taskListPaddingX]
+			});
+
+			continue;
+		}
+
+		ui.div({
+			text: formattedName,
+			width: nameColumnWidth,
+			padding: [0, taskListPaddingX, 0, taskListPaddingX]
+		});
+	}
+
+	ui.div("");
 
 	return ui.toString();
 };
