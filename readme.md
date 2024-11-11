@@ -410,8 +410,7 @@ export const fun = task.strict(
 
 ```shell
 pnpm hr extra fun because there are more words
-# → 5
-# → undefined
+# Error: Environment variable 'SECRET_KEY': Required
 
 SECRET_KEY=abcdefgh pnpm hr extra fun because there are more words
 # → 5
