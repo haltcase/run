@@ -134,7 +134,7 @@ test("task.strict: validates options with the given schema", () => {
 	}).toThrow(`${red("--logLevel")}: Number must be greater than 0`);
 });
 
-test("task.strict: exposes the given schema and its input properties", () => {
+test("task.strict: exposes the given schema", () => {
 	const fn = task.strict(
 		{
 			startDate: z.string().date(),
@@ -156,14 +156,28 @@ test("task.strict: exposes the given schema and its input properties", () => {
 		logLevel: 6
 	});
 
-	expect(fn.inputSchema.logLevel.safeParse(5).data).toBe(5);
-	expect(fn.inputSchema.logLevel.safeParse().data).toBe(6);
+	expect(
+		fn.schema.safeParse({
+			_: [],
+			env: {},
+			startDate: "2532-10-10",
+			logLevel: 5
+		}).data?.logLevel
+	).toBe(5);
+
+	expect(
+		fn.schema.safeParse({
+			_: [],
+			env: {},
+			startDate: "2532-10-10"
+		}).data?.logLevel
+	).toBe(6);
 
 	expect(() => {
-		fn.inputSchema.startDate.parse("1970-01-01");
-	}).not.toThrow();
-
-	expect(() => {
-		fn.inputSchema.startDate.parse("not a data string");
+		fn.schema.parse({
+			_: [],
+			env: {},
+			startDate: "not a date string"
+		});
 	}).toThrow();
 });

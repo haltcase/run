@@ -7,6 +7,7 @@ import { bold, yellow } from "colorette";
 
 import type { AppConfig } from "../config.js";
 import { isBrandedTask } from "../tasks/guards.js";
+import { getSchemaProperties } from "../util/getSchemaProperties.js";
 import { extensions } from "../util/resolveTaskFile.js";
 import type { MainContextWithData } from "./main.js";
 
@@ -84,10 +85,10 @@ export const taskListHandler = (context: HelpContextScript): string => {
 
 			if (isBrandedTask(value)) {
 				if (value.kind === "strictTask") {
-					const keys = Object.keys(value.inputSchema).join(", ");
+					const properties = getSchemaProperties(value.schema);
 					const { description = "" } = value.schema;
 
-					return [formattedName, keys && `{ ${keys} }`, description]
+					return [formattedName, properties, description]
 						.filter(Boolean)
 						.join("\t");
 				}

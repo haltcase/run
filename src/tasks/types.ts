@@ -71,12 +71,12 @@ export type Task<TOptions = DefaultOptionsInput> = (
 	utilities: TaskUtilities
 ) => unknown;
 
-export type BrandedTaskStrict<TOptions = DefaultOptionsInput> =
-	Task<TOptions> & {
-		kind: "strictTask";
-		inputSchema: Partial<SchemaInput>;
-		schema: z.ZodType<TOptions>;
-	};
+export type BrandedTaskStrict<
+	TSchema extends z.ZodTypeAny = z.ZodType<DefaultOptionsInput>
+> = Task<z.input<TSchema>> & {
+	kind: "strictTask";
+	schema: TSchema;
+};
 
 export type BrandedTaskLoose<TOptions = DefaultOptionsInput> =
 	Task<TOptions> & {
@@ -86,4 +86,4 @@ export type BrandedTaskLoose<TOptions = DefaultOptionsInput> =
 
 export type BrandedTask<TOptions = DefaultOptionsInput> =
 	| BrandedTaskLoose<TOptions>
-	| BrandedTaskStrict<TOptions>;
+	| BrandedTaskStrict<z.ZodType<TOptions>>;

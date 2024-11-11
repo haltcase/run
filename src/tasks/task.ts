@@ -53,7 +53,7 @@ task.strict = <
 >(
 	shape: TShape,
 	fn: Task<z.infer<TSchema>>
-): BrandedTaskStrict<z.input<TSchema>> => {
+): BrandedTaskStrict<TSchema> => {
 	const defaultValidators = {
 		_: z.string().array(),
 		env: z.object({}).passthrough()
@@ -64,10 +64,7 @@ task.strict = <
 		...(shape as Defined<TShape>)
 	});
 
-	const taskFunction: BrandedTaskStrict<z.input<TSchema>> = (
-		options,
-		utilities
-	) => {
+	const taskFunction: BrandedTaskStrict<TSchema> = (options, utilities) => {
 		const { data, success, error } = schema.safeParse(options);
 
 		if (!success) {
@@ -83,8 +80,7 @@ task.strict = <
 	};
 
 	taskFunction.kind = "strictTask";
-	taskFunction.schema = schema;
-	taskFunction.inputSchema = shape;
+	taskFunction.schema = schema as unknown as TSchema;
 
 	return taskFunction;
 };
