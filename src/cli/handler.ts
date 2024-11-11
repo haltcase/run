@@ -76,7 +76,7 @@ export const taskListHandler = (context: HelpContextScript): string => {
 
 	const { config } = context.taskFile.data;
 
-	const baseUsage = usage.replace("<action>", context.taskFile.name);
+	const baseUsage = usage.replace("<taskFile>", context.taskFile.name);
 
 	ui.div(`${baseUsage} <parameter> [...options]`);
 
