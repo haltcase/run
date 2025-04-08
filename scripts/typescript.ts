@@ -1,7 +1,7 @@
 import type { ParsedOptions, Task } from "@haltcase/run";
 import { task } from "@haltcase/run";
+import { type } from "arktype";
 import { writeFile } from "fs/promises";
-import { z } from "zod";
 
 interface HelloOptions extends ParsedOptions {
 	name: string;
@@ -37,33 +37,42 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 
 export const test = task.strict(
 	{
-		_: z
-			.string()
-			.array()
-			.transform((values) => values.length),
-		env: z
-			.object({
-				SHELL: z.string()
-			})
-			.transform((object) => ({ ...object })),
-		foo: z.string().default("bar")
+		_: type("string[]").pipe((value) => value.length),
+		env: {
+			SHELL: "string"
+		},
+		foo: "string = 'bar'"
 	},
-	async ({ _, env }) => {
-		console.log(_, env.SHELL);
+	async ({ _, env, foo }) => {
+		console.log(_, env.SHELL, foo);
 	}
 );
 
 export const printCharacter = task.strict(
 	{
-		name: z.string(),
-		armorClass: z.coerce.number(),
-		flag: z
-			.string()
-			.transform((value) => value === "true")
-			.optional()
+		name: "string",
+		armorClass: "string.numeric.parse",
+		flag: type("string").pipe((value) => value === "true"),
+		env: {
+			SOME_FLAG: "string.numeric.parse"
+		}
 	},
 	async ({ name, armorClass, flag }) => {
 		console.log(flag, typeof flag);
 		console.log(`🎲 ${name}\n🛡️  ${armorClass}`);
 	}
 );
+
+const inputSchema = type({
+	_: type("string[]").pipe((values) => values.length),
+	env: {
+		// undeclared property handling (default is "ignore", aka passthrough)
+		"+": "delete",
+		SECRET_KEY: "string >= 8"
+	}
+});
+
+export const fun = task.strict(inputSchema, async ({ _, env }) => {
+	console.log(`Positionals count (_) = ${_}`);
+	console.log(`SECRET_KEY = ${env.SECRET_KEY}`);
+});
