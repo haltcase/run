@@ -1,15 +1,15 @@
+import { type } from "arktype";
 import { expect, test } from "vitest";
-import { z } from "zod";
 
 import { getSchemaProperties } from "./getSchemaProperties.js";
 
-test("getSchemaProperties: lists properties of the given zod schema", () => {
-	expect(getSchemaProperties(z.object({}))).toBe("");
+test("getSchemaProperties: lists properties of the given schema", () => {
+	expect(getSchemaProperties(type({}))).toBe("");
 
 	expect(
 		getSchemaProperties(
-			z.object({
-				optionName: z.string()
+			type({
+				optionName: "string"
 			})
 		)
 	).toBe("{ optionName }");
@@ -18,9 +18,9 @@ test("getSchemaProperties: lists properties of the given zod schema", () => {
 test("getSchemaProperties: wraps optional parameter names with []", () => {
 	expect(
 		getSchemaProperties(
-			z.object({
-				optionName: z.string(),
-				maybeFlag: z.boolean().optional()
+			type({
+				optionName: "string",
+				maybeFlag: "boolean?"
 			})
 		)
 	).toBe("{ optionName, [maybeFlag] }");
@@ -29,15 +29,14 @@ test("getSchemaProperties: wraps optional parameter names with []", () => {
 test("getSchemaProperties: `_` and `env` are not listed", () => {
 	expect(
 		getSchemaProperties(
-			z.object({
-				_: z.string().array(),
-				env: z.object({
-					SOME_FLAG: z
-						.string()
-						.transform((value) => value.toLowerCase() === "true")
-				}),
-				optionName: z.string(),
-				maybeFlag: z.boolean().optional()
+			type({
+				_: "string[]",
+				env: {
+					SOME_FLAG: "string"
+					// .transform((value) => value.toLowerCase() === "true")
+				},
+				optionName: "string",
+				maybeFlag: "boolean?"
 			})
 		)
 	).toBe("{ optionName, [maybeFlag] }");
