@@ -9,7 +9,7 @@
 		"function",
 		"typescript",
 		"execa",
-		"zod"
+		"arktype"
 	],
 	"homepage": "https://github.com/haltcase/run#readme",
 	"bugs": "https://github.com/haltcase/run/issues",
@@ -49,11 +49,10 @@
 	"dependencies": {
 		"@favware/colorette-spinner": "^1.0.1",
 		"@isaacs/cliui": "^8.0.2",
+		"arktype": "^2.1.17",
 		"c12": "^2.0.1",
 		"colorette": "^2.0.20",
-		"execa": "^9.5.1",
-		"zod": "^3.23.8",
-		"zod-validation-error": "^3.4.0"
+		"execa": "^9.5.1"
 	},
 	"devDependencies": {
 		"@haltcase/style": "^6.2.1",

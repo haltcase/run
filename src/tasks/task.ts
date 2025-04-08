@@ -1,42 +1,42 @@
+import type { ArkErrors, Type } from "arktype";
+import { type } from "arktype";
 import { red } from "colorette";
-import { z } from "zod";
-import type { MessageBuilder } from "zod-validation-error";
-import { fromZodError } from "zod-validation-error";
 
-import type { Defined, Merge } from "../util/types.js";
 import type {
 	BrandedTask,
 	BrandedTaskStrict,
 	DefaultOptionsInput,
-	SchemaDefaults,
-	SchemaInput,
 	Task
 } from "./types.js";
 
-const zodMessageBuilder: MessageBuilder = (issues) =>
-	issues
-		.map((issue) => {
-			const propertyName = issue.path[0];
-
-			if (issue.code === "unrecognized_keys") {
-				const keyList = issue.keys.map((key) => `--${key}`).join(", ");
-				return `${red("Unrecognized options")}: ${keyList}`;
-			}
+const formatValidationIssues = (errors: ArkErrors): string =>
+	errors
+		.map((error) => {
+			const propertyName = String(error.path[0]);
+			const dottedPath = error.path.join(".");
 
 			if (!propertyName) {
-				return issue.message;
+				return error.message;
 			}
 
+			const messageWithoutProperty = error.message.startsWith(dottedPath)
+				? error.message.slice(dottedPath.length + 1)
+				: error.message;
+
 			if (propertyName === "env") {
-				const prefix = red(`Environment variable '${issue.path[1]}'`);
-				return `${prefix}: ${issue.message}`;
+				const prefix = red(`Environment variable '${String(error.path[1])}'`);
+				return `${prefix}: ${messageWithoutProperty}`;
 			}
 
 			const optionText =
 				propertyName === "_" ? "Positionals" : `--${propertyName}`;
 
+			if (error.code === "predicate" && error.expected === "removed") {
+				return `${red(optionText)}: unknown option`;
+			}
+
 			// we currently assume there is only ever one path segment
-			return `${red(optionText)}: ${issue.message}`;
+			return `${red(optionText)}: ${messageWithoutProperty}`;
 		})
 		.join("\n");
 
@@ -45,42 +45,42 @@ export const task = <T = DefaultOptionsInput>(fn: Task<T>): BrandedTask<T> => {
 	return fn as BrandedTask<T>;
 };
 
-task.strict = <
-	TShape extends Partial<SchemaInput>,
-	TSchema extends z.ZodObject<
-		Merge<SchemaDefaults, Defined<TShape>>
-	> = z.ZodObject<Merge<SchemaDefaults, Defined<TShape>>>
->(
-	shape: TShape,
-	fn: Task<z.infer<TSchema>>
-): BrandedTaskStrict<TSchema> => {
-	const defaultValidators = {
-		_: z.string().array(),
-		env: z.object({}).passthrough()
-	};
+/**
+ * Default schema for the options received by a {@link task}.
+ */
+export const defaultOptionsInput = type({
+	_: "string[]",
+	env: "Record<string, string | undefined>"
+});
 
-	const schema = z.strictObject({
-		...defaultValidators,
-		...(shape as Defined<TShape>)
-	});
+/**
+ * Create a task that validates its input against a schema.
+ */
+task.strict = <const TShape>(
+	shape: type.validate<TShape>,
+	fn: Task<NoInfer<Type<type.infer<TShape>>["infer"]>>
+): BrandedTaskStrict<Type<type.infer<TShape>>["inferIn"]> => {
+	const schema = defaultOptionsInput
+		.merge(type.raw(shape))
+		.onUndeclaredKey("reject");
 
-	const taskFunction: BrandedTaskStrict<TSchema> = (options, utilities) => {
-		const { data, success, error } = schema.safeParse(options);
+	const taskFunction: ReturnType<typeof task.strict<TShape>> = (
+		options,
+		utilities
+	) => {
+		const validationResult = schema(options);
 
-		if (!success) {
-			throw new Error(
-				fromZodError(error, { messageBuilder: zodMessageBuilder }).message,
-				{
-					cause: error
-				}
-			);
+		if (validationResult instanceof type.errors) {
+			throw new TypeError(formatValidationIssues(validationResult), {
+				cause: validationResult
+			});
 		}
 
-		return fn(data as z.infer<TSchema>, utilities);
+		return fn(validationResult as never, utilities);
 	};
 
 	taskFunction.kind = "strictTask";
-	taskFunction.schema = schema as unknown as TSchema;
+	taskFunction.schema = schema as never;
 
 	return taskFunction;
 };

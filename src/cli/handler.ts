@@ -3,7 +3,7 @@ import { extname } from "node:path";
 
 import { Spinner } from "@favware/colorette-spinner";
 import cliui from "@isaacs/cliui";
-import { bold, yellow } from "colorette";
+import { bold, gray, yellow } from "colorette";
 
 import type { AppConfig } from "../config.js";
 import { isBrandedTask } from "../tasks/guards.js";
@@ -103,8 +103,8 @@ export const taskListHandler = (context: HelpContextScript): string => {
 
 		if (isBrandedTask(value)) {
 			if (value.kind === "strictTask") {
-				const properties = getSchemaProperties(value.schema);
-				const { description = "" } = value.schema;
+				const properties =
+					getSchemaProperties(value.schema) || gray("not available");
 
 				ui.div(
 					{
@@ -112,7 +112,7 @@ export const taskListHandler = (context: HelpContextScript): string => {
 						width: nameColumnWidth,
 						padding: [0, taskListPaddingX, 0, taskListPaddingX]
 					},
-					...[properties, description].filter(Boolean)
+					properties
 				);
 
 				continue;

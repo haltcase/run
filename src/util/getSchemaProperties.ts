@@ -1,25 +1,46 @@
-import type { z } from "zod";
+import { type Type, type } from "arktype";
 
 import { reservedNames } from "../cli/parseOptions.js";
 
-export const getSchemaProperties = (schema: z.ZodTypeAny): string => {
-	const definition = schema._def as object;
+const propertyEntry = type({
+	key: "string",
+	"+": "delete"
+});
 
-	if (!("shape" in definition) || typeof definition.shape !== "function") {
+const arktypeJson = type({
+	domain: "string",
+	required: propertyEntry.array().default(() => []),
+	optional: propertyEntry.array().default(() => [])
+});
+
+export const getSchemaProperties = (schema: Type): string => {
+	const definition = arktypeJson.assert(schema.json);
+
+	if (definition instanceof type.errors || definition.domain !== "object") {
 		return "";
 	}
 
-	const shape = definition.shape() as Record<string, z.ZodTypeAny>;
-	const entries = Object.entries(shape);
+	const { required, optional } = definition;
 
-	if (entries.length === 0) {
+	const requiredProperties = required.map(({ key }) => ({
+		key,
+		isOptional: false
+	}));
+	const optionalProperties = optional.map(({ key }) => ({
+		key,
+		isOptional: true
+	}));
+
+	const properties = [...requiredProperties, ...optionalProperties];
+
+	if (properties.length === 0) {
 		return "";
 	}
 
-	const propertyList = Object.entries(shape)
-		.filter(([key]) => !reservedNames.has(key))
-		.map(([key, value]) => {
-			if (value.isOptional()) {
+	const propertyList = properties
+		.filter(({ key }) => !reservedNames.has(key))
+		.map(({ key, isOptional }) => {
+			if (isOptional) {
 				return `[${key}]`;
 			}
 

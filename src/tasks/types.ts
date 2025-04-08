@@ -1,5 +1,5 @@
+import type { Type } from "arktype";
 import type { ExecaMethod, ExecaScriptMethod } from "execa";
-import type { z } from "zod";
 
 import type { ParsedOptions } from "../cli/parseOptions.js";
 
@@ -44,46 +44,35 @@ export interface TaskUtilities {
 	}>;
 }
 
-export type CustomShape = Record<string, z.ZodTypeAny>;
-
-// allow `any` type here which allows type inference to work
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export interface SchemaInput {
-	_: z.ZodType<any, z.ZodTypeDef, string[]>;
-	env: z.ZodType<any, z.ZodTypeDef, Record<string, string | undefined>>;
-	[key: string]: z.ZodTypeAny;
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-export interface SchemaDefaults {
-	_: z.ZodArray<z.ZodString>;
-	env: z.ZodObject<Record<string, z.ZodOptional<z.ZodString>>>;
-}
-
 export type DefaultOptionsInput = ParsedOptions & {
 	env: Record<string, string | undefined>;
 };
 
 export type TaskCollection = Partial<Record<string, Task>>;
 
-export type Task<TOptions = DefaultOptionsInput> = (
-	options: TOptions,
+type MergePositionals<TOptions> = "_" extends keyof TOptions
+	? TOptions
+	: TOptions & ParsedOptions;
+
+type MergeEnvironment<TOptions> = "env" extends keyof TOptions
+	? TOptions
+	: TOptions & Pick<DefaultOptionsInput, "env">;
+
+export type Task<TOptions = unknown> = (
+	options: MergePositionals<MergeEnvironment<TOptions>>,
 	utilities: TaskUtilities
 ) => unknown;
 
-export type BrandedTaskStrict<
-	TSchema extends z.ZodTypeAny = z.ZodType<DefaultOptionsInput>
-> = Task<z.input<TSchema>> & {
+export type BrandedTaskStrict<TShape = DefaultOptionsInput> = Task<TShape> & {
 	kind: "strictTask";
-	schema: TSchema;
+	schema: Type<TShape>;
 };
 
-export type BrandedTaskLoose<TOptions = DefaultOptionsInput> =
-	Task<TOptions> & {
-		kind: "task";
-		schema: never;
-	};
+export type BrandedTaskLoose<TOptions = unknown> = Task<TOptions> & {
+	kind: "task";
+	schema: never;
+};
 
-export type BrandedTask<TOptions = DefaultOptionsInput> =
+export type BrandedTask<TOptions = unknown> =
 	| BrandedTaskLoose<TOptions>
-	| BrandedTaskStrict<z.ZodType<TOptions>>;
+	| BrandedTaskStrict<TOptions>;
