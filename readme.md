@@ -7,7 +7,7 @@
 - ✅ Write task files in TypeScript or plain JavaScript
 - ✅ [Execa] built in for shell command execution
 - ✅ Tasks are "just functions" exported from your script files
-- ✅ [Zod] schema support for stricter task execution
+- ✅ Integrated [Arktype] schema support for stricter task execution
 
 ## Quick start
 
@@ -213,11 +213,13 @@ export const build = async ({ mode }, { $ }) => {
 
 See [API](#api) for full API details.
 
-### Task option validation using Zod schemas
+### Task option validation using Arktype schemas
 
-Using [`task.strict`](#taskstrict), you can supply a [Zod] schema to move validations out of
-your task's logic. If you transform the input, your task function's TypeScript
-types will infer the output type.
+Using `task.strict`, you can define an [Arktype] schema to move
+validations out of your task's logic. If you transform the input (via [Morphs]),
+your task function's TypeScript types will infer the output type of the morph and your task will receive the updated type.
+
+See the [`task.strict`](#taskstrict) for more.
 
 ## Configuration
 
@@ -290,11 +292,12 @@ pnpm hr greetings hello --name
 
 If you want to pass a boolean value for an option, pass `true`/`false` and
 parse it yourself or use [`task.strict`](#taskstrict), for example using the
-Zod schema: `z.string().transform(value => value === "true")`.
+Arktype schema: `type("string").pipe((value) => value === "true")`.
 
 ### `task`
 
-`task` is a very light wrapper around a function that provides improved type inference.
+`task` is a very light wrapper around a function that provides improved type
+inference.
 
 ```ts
 task<TOptions>(fn: Task<T>): BrandedTask<T>
@@ -326,7 +329,7 @@ export const customOptions = task<CustomOptions>((options) => {
 > Because all command line arguments are strings, you should only use `string`
 > as the value type for options with this method. If you want to be stricter
 > about value types by validating or transforming them, implement the parsing
-> yourself or use [`task.strict`](#taskstrict) with a Zod schema.
+> yourself or use [`task.strict`](#taskstrict) with an [Arktype] schema.
 
 ### `Task`
 
@@ -344,20 +347,19 @@ line options and a [`utilities`](#taskutilities) object providing tools for shel
 
 Properties:
 
-- `$` &ndash; Runa command using Execa's [script mode][execascript].
+- `$` &ndash; Run a command using Execa's [script mode][execascript].
 - `command` &ndash; Run a command using [Execa] (e.g., shell command or script).
 - `exec` &ndash; Same as `command`, but inherits the parent process' stdio streams by default.
 
 ### `task.strict`
 
-Provide the shape for a Zod schema as the first argument and a task function as
-the second. The task function will receive the safely parsed and validated
-output of the Zod schema, and its types will be inferred automatically.
-
-Note that you supply a plain object for the shape rather than a full Zod schema.
+Provide the shape for an [Arktype] schema as the first argument and a task
+function as the second. The task function will receive the safely parsed and
+validated output of the Arktype schema, and its types will be inferred
+automatically.
 
 ```ts
-task.strict<TShape, TSchema?>(shape: TShape, fn: Task<z.infer<TSchema>>): BrandedTaskStrict<z.infer<TSchema>>
+task.strict<TShape, TSchema?>(shape: TShape, fn: Task<TShape>): BrandedTaskStrict<TShape>
 ```
 
 Usage:
@@ -366,16 +368,18 @@ Usage:
 // scripts/strict-tasks.ts
 
 import { task } from "@haltcase/run";
-import { z } from "zod";
 
 export const printCharacter = task.strict(
 	{
-		// positional/unnamed arguments
-		_: z.array(z.string()),
-		// environment variables
-		env: z.object({}).passthrough(),
-		name: z.string(),
-		armorClass: z.coerce.number()
+		// positional/unnamed arguments (default type, can be omitted)
+		_: "string[]",
+		// environment variables (default type, can be omitted)
+		env: "Record<string, string | undefined>",
+
+		// a simple type
+		name: "string",
+		// an input → output morph (transform string to number)
+		armorClass: "string.numeric.parse"
 	},
 	async ({ name, armorClass }) => {
 		console.log(`🎲 ${name}\n🛡️  ${armorClass}`);
@@ -391,15 +395,16 @@ reference to Node's `process.env`. For instance:
 // scripts/extra.ts
 
 import { task } from "@haltcase/run";
-import { z } from "zod";
+import { type } from "arktype";
 
 export const fun = task.strict(
 	{
-		_: z.array(z.string()).transform((values) => values.length),
-		// note: `z.object` strips unspecified keys by default
-		env: z.object({
-			SECRET_KEY: z.string().min(8)
-		})
+		_: type("string[]").pipe((values) => values.length),
+		env: {
+			// Arktype undeclared property handling (default is "ignore", aka passthrough)
+			"+": "delete",
+			SECRET_KEY: "string >= 8"
+		}
 	},
 	async ({ _, env }) => {
 		console.log(`Positionals count (_) = ${_}`);
@@ -410,15 +415,43 @@ export const fun = task.strict(
 
 ```shell
 pnpm hr extra fun because there are more words
-# Error: Environment variable 'SECRET_KEY': Required
+# Error: Environment variable 'SECRET_KEY': must be a string (was missing)
 
 SECRET_KEY=abcdefgh pnpm hr extra fun because there are more words
 # → 5
 # → abcdefgh
 ```
 
+If you already have an Arktype type, you can pass it to `task.strict`:
+
+```ts
+// scripts/extra.ts
+
+import { task } from "@haltcase/run";
+import { type } from "arktype";
+
+const inputSchema = type({
+	_: type("string[]").pipe((values) => values.length),
+	env: {
+		// undeclared property handling (default is "ignore", aka passthrough)
+		"+": "delete",
+		SECRET_KEY: "string >= 8"
+	}
+});
+
+export const fun = task.strict(inputSchema, async ({ _, env }) => {
+	console.log(`Positionals count (_) = ${_}`);
+	console.log(`SECRET_KEY = ${env.SECRET_KEY}`);
+
+	// using "delete" for undeclared keys strips other properties:
+	console.log(Object.keys(env));
+	// ["SECRET_KEY"]
+});
+```
+
 [execa]: https://github.com/sindresorhus/execa#readme
 [execascript]: https://github.com/sindresorhus/execa/blob/main/docs/scripts.md
-[zod]: https://zodjs.netlify.app/
+[arktype]: https://arktype.io/
+[morphs]: https://arktype.io/docs/intro/morphs-and-more
 [nodeparseargs]: https://nodejs.org/api/util.html#utilparseargsconfig
 [c12]: https://github.com/unjs/c12?tab=readme-ov-file#-features
