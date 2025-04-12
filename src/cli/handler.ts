@@ -2,7 +2,7 @@ import { readdirSync } from "node:fs";
 import { extname } from "node:path";
 
 import { Spinner } from "@favware/colorette-spinner";
-import cliui from "@isaacs/cliui";
+import cliuiCjs from "@isaacs/cliui";
 import { bold, gray, yellow } from "colorette";
 
 import type { AppConfig } from "../config.js";
@@ -10,6 +10,8 @@ import { isBrandedTask } from "../tasks/guards.js";
 import { getSchemaProperties } from "../util/getSchemaProperties.js";
 import { extensions } from "../util/resolveTaskFile.js";
 import type { MainContextWithData } from "./main.js";
+
+const cliui = cliuiCjs.default;
 
 export const failWith = (spinner: Spinner, message: unknown): never => {
 	let text: string | undefined;
