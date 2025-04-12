@@ -33,8 +33,9 @@ test("getSchemaProperties: `_` and `env` are not listed", () => {
 			type({
 				_: "string[]",
 				env: {
-					SOME_FLAG: "string"
-					// .transform((value) => value.toLowerCase() === "true")
+					SOME_FLAG: type("string").pipe(
+						(value) => value.toLowerCase() === "true"
+					)
 				},
 				optionName: "string",
 				maybeFlag: "boolean?"
