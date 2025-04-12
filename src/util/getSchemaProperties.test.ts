@@ -43,3 +43,14 @@ test("getSchemaProperties: `_` and `env` are not listed", () => {
 		)
 	).toBe(`{ optionName, ${dim("[maybeFlag]")} }`);
 });
+
+test("getSchemaProperties: outputs empty list if only reserved names present", () => {
+	expect(
+		getSchemaProperties(
+			type({
+				_: "string[]",
+				env: "Record<string, string | undefined>"
+			})
+		)
+	).toBe("{  }");
+});
