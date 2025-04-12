@@ -1,4 +1,5 @@
 import { type } from "arktype";
+import { dim } from "colorette";
 import { expect, test } from "vitest";
 
 import { getSchemaProperties } from "./getSchemaProperties.js";
@@ -23,7 +24,7 @@ test("getSchemaProperties: wraps optional parameter names with []", () => {
 				maybeFlag: "boolean?"
 			})
 		)
-	).toBe("{ optionName, [maybeFlag] }");
+	).toBe(`{ optionName, ${dim("[maybeFlag]")} }`);
 });
 
 test("getSchemaProperties: `_` and `env` are not listed", () => {
@@ -39,5 +40,5 @@ test("getSchemaProperties: `_` and `env` are not listed", () => {
 				maybeFlag: "boolean?"
 			})
 		)
-	).toBe("{ optionName, [maybeFlag] }");
+	).toBe(`{ optionName, ${dim("[maybeFlag]")} }`);
 });
