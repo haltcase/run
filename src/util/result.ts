@@ -1,11 +1,13 @@
-export interface ResultOk<T> {
+export interface ResultOk<TValue> {
 	ok: true;
-	value: T;
+	value: TValue;
 }
 
-export interface ResultError<E> {
+export interface ResultError<TError> {
 	ok: false;
-	error: E;
+	error: TError;
 }
 
-export type Result<T, E = Error> = ResultOk<T> | ResultError<E>;
+export type Result<TValue, TError = Error> =
+	| ResultOk<TValue>
+	| ResultError<TError>;

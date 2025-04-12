@@ -72,7 +72,8 @@ test("task.strict: `_` and `env` have default types if not specified", () => {
 		expectTypeOf(env).not.toHaveProperty("UNKNOWN_FIELD");
 
 		// @ts-expect-error -- UNKNOWN_FIELD is not in the schema
-		env.UNKNOWN_FIELD;
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const _value = env.UNKNOWN_FIELD;
 	});
 });
 

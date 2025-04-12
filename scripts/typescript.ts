@@ -1,7 +1,7 @@
 import type { ParsedOptions, Task } from "@haltcase/run";
 import { task } from "@haltcase/run";
 import { type } from "arktype";
-import { writeFile } from "fs/promises";
+import { writeFile } from "node:fs/promises";
 
 interface HelloOptions extends ParsedOptions {
 	name: string;
@@ -18,7 +18,7 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 
 	const image = (await (
 		await fetch(
-			"https://fakerapi.it/api/v2/images?_quantity=1&width=48&height=48"
+			"https://fakerapi.it/api/v2/images?_quantity=1&width=48&height=48",
 		)
 	).json()) as any;
 
@@ -31,7 +31,7 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 	await writeFile(
 		"./image-data/example.json",
 		JSON.stringify(image.data[0]),
-		"utf8"
+		"utf8",
 	);
 });
 
@@ -39,13 +39,13 @@ export const test = task.strict(
 	{
 		_: type("string[]").pipe((value) => value.length),
 		env: {
-			SHELL: "string"
+			SHELL: "string",
 		},
-		foo: "string = 'bar'"
+		foo: "string = 'bar'",
 	},
 	async ({ _, env, foo }) => {
 		console.log(_, env.SHELL, foo);
-	}
+	},
 );
 
 export const printCharacter = task.strict(
@@ -54,13 +54,13 @@ export const printCharacter = task.strict(
 		armorClass: "string.numeric.parse",
 		flag: type("string").pipe((value) => value === "true"),
 		env: {
-			SOME_FLAG: "string.numeric.parse"
-		}
+			SOME_FLAG: "string.numeric.parse",
+		},
 	},
 	async ({ name, armorClass, flag }) => {
 		console.log(flag, typeof flag);
 		console.log(`🎲 ${name}\n🛡️  ${armorClass}`);
-	}
+	},
 );
 
 const inputSchema = type({
@@ -68,8 +68,8 @@ const inputSchema = type({
 	env: {
 		// undeclared property handling (default is "ignore", aka passthrough)
 		"+": "delete",
-		SECRET_KEY: "string >= 8"
-	}
+		SECRET_KEY: "string >= 8",
+	},
 });
 
 export const fun = task.strict(inputSchema, async ({ _, env }) => {
