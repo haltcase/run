@@ -36,6 +36,7 @@
 		"build:watch": "tsc -p tsconfig.build.json --watch",
 		"eslint:check": "eslint src",
 		"format": "eslint --fix src && prettier src --write",
+		"hr": "tsx ./src/cli/bin.ts",
 		"prepack": "pnpm run build",
 		"prepare": "husky",
 		"prettier:check": "prettier --check src",
@@ -61,6 +62,7 @@
 		"husky": "^9.1.6",
 		"lint-staged": "^15.2.10",
 		"prettier": "^3.3.3",
+		"tsx": "^4.19.3",
 		"typescript": "^5.6.3",
 		"vitest": "^2.1.4"
 	},
