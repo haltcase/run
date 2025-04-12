@@ -25,7 +25,7 @@ test("task: receives `env` property", () => {
 	const fn = task(({ env }) => {
 		expect(env).toMatchObject({
 			PWD: "/home/sources",
-			SHELL: "/bin/bash",
+			SHELL: "/bin/bash"
 		});
 	});
 
@@ -34,10 +34,10 @@ test("task: receives `env` property", () => {
 			_: ["1", "2", "3"],
 			env: {
 				PWD: "/home/sources",
-				SHELL: "/bin/bash",
-			},
+				SHELL: "/bin/bash"
+			}
 		},
-		taskUtilities,
+		taskUtilities
 	);
 });
 
@@ -82,21 +82,21 @@ test("task.strict: `_` and `env` types can be overridden", () => {
 		{
 			// these types don't make sense, but they are just for testing
 			_: "number",
-			env: "number",
+			env: "number"
 		},
 		({ _, env }) => {
 			expectTypeOf(_).toEqualTypeOf<number>();
 			expectTypeOf(env).toEqualTypeOf<number>();
-		},
+		}
 	);
 });
 
 test("task.strict: validates positionals with the given schema", () => {
 	const fn = task.strict(
 		{
-			_: "0 < string[] <= 3",
+			_: "0 < string[] <= 3"
 		},
-		() => "ok",
+		() => "ok"
 	);
 
 	expect(() => fn({ _: ["1", "2"], env: {} }, taskUtilities)).not.toThrow();
@@ -117,15 +117,15 @@ test("task.strict: validates environment variables with the given schema", () =>
 		{
 			env: {
 				SOME_FLAG: type("string").pipe(
-					(value) => value.toLowerCase() === "true",
-				),
-			},
+					(value) => value.toLowerCase() === "true"
+				)
+			}
 		},
-		() => "ok",
+		() => "ok"
 	);
 
 	expect(fn({ _: ["1"], env: { SOME_FLAG: "true" } }, taskUtilities)).toBe(
-		"ok",
+		"ok"
 	);
 
 	expect(() => {
@@ -133,12 +133,12 @@ test("task.strict: validates environment variables with the given schema", () =>
 			{
 				_: ["1"],
 				// @ts-expect-error env.SOME_FLAG is required
-				env: {},
+				env: {}
 			},
-			taskUtilities,
+			taskUtilities
 		);
 	}).toThrow(
-		`${red("Environment variable 'SOME_FLAG'")}: must be a string (was missing)`,
+		`${red("Environment variable 'SOME_FLAG'")}: must be a string (was missing)`
 	);
 });
 
@@ -146,17 +146,17 @@ test("task.strict: validates options with the given schema", () => {
 	const fn = task.strict(
 		{
 			startDate: "string.date",
-			logLevel: "number >= 0 = 6",
+			logLevel: "number >= 0 = 6"
 		},
-		({ logLevel }) => logLevel,
+		({ logLevel }) => logLevel
 	);
 
 	expect(
-		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities),
+		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)
 	).toBe(1);
 
 	expect(fn({ _: [], env: {}, startDate: "2532-10-10" }, taskUtilities)).toBe(
-		6,
+		6
 	);
 
 	expect(() => {
@@ -164,9 +164,9 @@ test("task.strict: validates options with the given schema", () => {
 			// @ts-expect-error --startDate is required
 			{
 				_: [],
-				env: {},
+				env: {}
 			},
-			taskUtilities,
+			taskUtilities
 		);
 	}).toThrow(`${red("--startDate")}: must be a string (was missing)`);
 
@@ -176,9 +176,9 @@ test("task.strict: validates options with the given schema", () => {
 				_: [],
 				env: {},
 				startDate: "2532-10-10",
-				logLevel: -1,
+				logLevel: -1
 			},
-			taskUtilities,
+			taskUtilities
 		);
 	}).toThrow(`${red("--logLevel")}: must be non-negative (was `);
 });
@@ -192,9 +192,9 @@ test("task.strict: rejects undeclared options", () => {
 				_: [],
 				env: {},
 				// note: TypeScript doesn't have errors for extra properties
-				undeclared: "value",
+				undeclared: "value"
 			},
-			taskUtilities,
+			taskUtilities
 		);
 	}).toThrow(`${red("--undeclared")}: unknown option`);
 });
@@ -202,13 +202,13 @@ test("task.strict: rejects undeclared options", () => {
 test("task.strict: accepts an existing schema type", () => {
 	const inputSchema = type({
 		startDate: "string.date",
-		logLevel: "number >= 0 = 6",
+		logLevel: "number >= 0 = 6"
 	});
 
 	const fn = task.strict(inputSchema, ({ logLevel }) => logLevel);
 
 	expect(
-		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities),
+		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)
 	).toBe(1);
 });
 
@@ -217,8 +217,8 @@ test("task.strict: accepts nested types with morphs", () => {
 		object: type("string.json.parse").to({
 			name: "string",
 			version: "string.semver",
-			homepage: "string.url",
-		}),
+			homepage: "string.url"
+		})
 	});
 
 	const fn = task.strict(inputSchema, ({ object }) => {
@@ -236,14 +236,14 @@ test("task.strict: accepts nested types with morphs", () => {
 			{
 				_: [],
 				env: {},
-				object: `{ "name": "@haltcase/run", "version": "3.0.0", "homepage": "https://github.com/haltcase/run" }`,
+				object: `{ "name": "@haltcase/run", "version": "3.0.0", "homepage": "https://github.com/haltcase/run" }`
 			},
-			taskUtilities,
-		),
+			taskUtilities
+		)
 	).toEqual({
 		name: "@haltcase/run",
 		version: "3.0.0",
-		homepage: "https://github.com/haltcase/run",
+		homepage: "https://github.com/haltcase/run"
 	});
 
 	expect(() => {
@@ -251,9 +251,9 @@ test("task.strict: accepts nested types with morphs", () => {
 			{
 				_: [],
 				env: {},
-				object: `{ "name": "@haltcase/run", "version": "3.0.0", "homepage": "not a url" }`,
+				object: `{ "name": "@haltcase/run", "version": "3.0.0", "homepage": "not a url" }`
 			},
-			taskUtilities,
+			taskUtilities
 		);
 	}).toThrow();
 });
@@ -262,22 +262,22 @@ test("task.strict: exposes the given schema", () => {
 	const fn = task.strict(
 		{
 			startDate: "string.date",
-			logLevel: "number >= 0 = 6",
+			logLevel: "number >= 0 = 6"
 		},
-		({ logLevel }) => logLevel,
+		({ logLevel }) => logLevel
 	);
 
 	expect(
 		fn.schema({
 			_: [],
 			env: {},
-			startDate: "2532-10-10",
-		}),
+			startDate: "2532-10-10"
+		})
 	).toMatchObject({
 		_: [],
 		env: {},
 		startDate: "2532-10-10",
-		logLevel: 6,
+		logLevel: 6
 	});
 
 	expect(
@@ -285,23 +285,23 @@ test("task.strict: exposes the given schema", () => {
 			_: [],
 			env: {},
 			startDate: "2532-10-10",
-			logLevel: 5,
-		}).logLevel,
+			logLevel: 5
+		}).logLevel
 	).toBe(5);
 
 	expect(
 		fn.schema.assert({
 			_: [],
 			env: {},
-			startDate: "2532-10-10",
-		}).logLevel,
+			startDate: "2532-10-10"
+		}).logLevel
 	).toBe(6);
 
 	expect(() => {
 		fn.schema.assert({
 			_: [],
 			env: {},
-			startDate: "not a date string",
+			startDate: "not a date string"
 		});
 	}).toThrow();
 });
