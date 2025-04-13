@@ -49,9 +49,9 @@
 	"prettier": "@haltcase/style/prettier",
 	"dependencies": {
 		"@favware/colorette-spinner": "^1.0.1",
-		"@isaacs/cliui": "^8.0.2",
 		"arktype": "^2.1.17",
 		"c12": "^2.0.1",
+		"cliui": "^9.0.1",
 		"colorette": "^2.0.20",
 		"execa": "^9.5.1"
 	},

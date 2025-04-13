@@ -10,15 +10,15 @@ importers:
       "@favware/colorette-spinner":
         specifier: ^1.0.1
         version: 1.0.1
-      "@isaacs/cliui":
-        specifier: ^8.0.2
-        version: 8.0.2
       arktype:
         specifier: ^2.1.17
         version: 2.1.17
       c12:
         specifier: ^2.0.1
         version: 2.0.1
+      cliui:
+        specifier: ^9.0.1
+        version: 9.0.1
       colorette:
         specifier: ^2.0.20
         version: 2.0.20
@@ -914,13 +914,6 @@ packages:
         integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==
       }
     engines: { node: ">=18.18" }
-
-  "@isaacs/cliui@8.0.2":
-    resolution:
-      {
-        integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==
-      }
-    engines: { node: ">=12" }
 
   "@jridgewell/gen-mapping@0.3.5":
     resolution:
@@ -1924,6 +1917,13 @@ packages:
       }
     engines: { node: ">=18" }
 
+  cliui@9.0.1:
+    resolution:
+      {
+        integrity: sha512-k7ndgKhwoQveBL+/1tqGJYNz097I7WOvwbmmU2AR5+magtbjPWQTS1C5vzGkBC8Ym8UWRzfKUzUUqFLypY4Q+w==
+      }
+    engines: { node: ">=20" }
+
   color-convert@2.0.1:
     resolution:
       {
@@ -2249,12 +2249,6 @@ packages:
         integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==
       }
     engines: { node: ">= 0.4" }
-
-  eastasianwidth@0.2.0:
-    resolution:
-      {
-        integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
-      }
 
   electron-to-chromium@1.5.136:
     resolution:
@@ -5075,13 +5069,6 @@ packages:
       }
     engines: { node: ">=8" }
 
-  string-width@5.1.2:
-    resolution:
-      {
-        integrity: sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==
-      }
-    engines: { node: ">=12" }
-
   string-width@7.2.0:
     resolution:
       {
@@ -5747,20 +5734,6 @@ packages:
       }
     engines: { node: ">=0.10.0" }
 
-  wrap-ansi@7.0.0:
-    resolution:
-      {
-        integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
-      }
-    engines: { node: ">=10" }
-
-  wrap-ansi@8.1.0:
-    resolution:
-      {
-        integrity: sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ==
-      }
-    engines: { node: ">=12" }
-
   wrap-ansi@9.0.0:
     resolution:
       {
@@ -6351,15 +6324,6 @@ snapshots:
   "@humanwhocodes/retry@0.3.1": {}
 
   "@humanwhocodes/retry@0.4.2": {}
-
-  "@isaacs/cliui@8.0.2":
-    dependencies:
-      string-width: 5.1.2
-      string-width-cjs: string-width@4.2.3
-      strip-ansi: 7.1.0
-      strip-ansi-cjs: strip-ansi@6.0.1
-      wrap-ansi: 8.1.0
-      wrap-ansi-cjs: wrap-ansi@7.0.0
 
   "@jridgewell/gen-mapping@0.3.5":
     dependencies:
@@ -6961,6 +6925,12 @@ snapshots:
       slice-ansi: 5.0.0
       string-width: 7.2.0
 
+  cliui@9.0.1:
+    dependencies:
+      string-width: 7.2.0
+      strip-ansi: 7.1.0
+      wrap-ansi: 9.0.0
+
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
@@ -7132,8 +7102,6 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
-
-  eastasianwidth@0.2.0: {}
 
   electron-to-chromium@1.5.136: {}
 
@@ -9091,12 +9059,6 @@ snapshots:
       is-fullwidth-code-point: 3.0.0
       strip-ansi: 6.0.1
 
-  string-width@5.1.2:
-    dependencies:
-      eastasianwidth: 0.2.0
-      emoji-regex: 9.2.2
-      strip-ansi: 7.1.0
-
   string-width@7.2.0:
     dependencies:
       emoji-regex: 10.4.0
@@ -9656,18 +9618,6 @@ snapshots:
       stackback: 0.0.2
 
   word-wrap@1.2.5: {}
-
-  wrap-ansi@7.0.0:
-    dependencies:
-      ansi-styles: 4.3.0
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-
-  wrap-ansi@8.1.0:
-    dependencies:
-      ansi-styles: 6.2.1
-      string-width: 5.1.2
-      strip-ansi: 7.1.0
 
   wrap-ansi@9.0.0:
     dependencies:
