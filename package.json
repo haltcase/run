@@ -1,6 +1,6 @@
 {
 	"name": "@haltcase/run",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Flexible, function-based task runner where command line options are props",
 	"keywords": [
 		"task",
