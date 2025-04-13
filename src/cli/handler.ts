@@ -56,7 +56,7 @@ export const commandHandler = (_context: HelpContextCommand): string => {
 
 export const taskFileListHandler = (context: HelpContextFile): string => {
 	const fileList = readdirSync(context.config.taskDirectory).filter((file) =>
-		extensions.includes(extname(file) as (typeof extensions)[number])
+		extensions.includes(extname(file))
 	);
 
 	const content = [
