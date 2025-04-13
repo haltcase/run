@@ -219,7 +219,7 @@ Using `task.strict`, you can define an [Arktype] schema to move
 validations out of your task's logic. If you transform the input (via [Morphs]),
 your task function's TypeScript types will infer the output type of the morph and your task will receive the updated type.
 
-See the [`task.strict`](#taskstrict) for more.
+See [`task.strict`](#taskstrict) for more.
 
 ## Configuration
 
