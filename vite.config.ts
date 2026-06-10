@@ -9,7 +9,8 @@ export default defineConfig({
 		sortPackageJson: {
 			sortScripts: true
 		},
-		trailingComma: "none"
+		trailingComma: "none",
+		ignorePatterns: ["pnpm-workspace.yaml"]
 	},
 	lint: {
 		options: {
