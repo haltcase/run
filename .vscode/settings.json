@@ -1,4 +1,16 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"js/ts.experimental.useTsgo": true,
+	"typescript.native-preview.tsdk": "node_modules/@typescript/native-preview",
+
+	"editor.defaultFormatter": "oxc.oxc-vscode",
+	"[css][html][markdown][json][jsonc][javascript][javascriptreact][typescript][typescriptreact]": {
+		"editor.defaultFormatter": "oxc.oxc-vscode"
+	},
+	"editor.formatOnSave": true,
+	"editor.formatOnSaveMode": "file",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.oxc": "always"
+	},
+	"oxc.fmt.configPath": "./vite.config.ts",
 	"vitest.shellType": "terminal"
 }

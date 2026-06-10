@@ -1,6 +1,6 @@
 import { type } from "arktype";
 import { dim } from "colorette";
-import { expect, test } from "vitest";
+import { expect, test } from "vite-plus/test";
 
 import { getSchemaProperties } from "./getSchemaProperties.js";
 

@@ -25,15 +25,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # this is necessary for typechecking the scripts folder
+      # This is necessary for typechecking the scripts folder
       - name: Build and self-link
         run: pnpm build && pnpm link .
 
-      - name: Check formatting (Prettier)
-        run: pnpm prettier:check
-
-      - name: Check types (TypeScript)
-        run: pnpm typescript:check
-
-      - name: Check linting (ESLint)
-        run: pnpm eslint:check
+      - name: Run format, lint, and type checks
+        run: pnpm check

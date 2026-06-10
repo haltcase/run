@@ -3,76 +3,79 @@
 	"version": "3.0.1",
 	"description": "Flexible, function-based task runner where command line options are props",
 	"keywords": [
-		"task",
-		"runner",
+		"arktype",
 		"command",
-		"function",
-		"typescript",
 		"execa",
-		"arktype"
+		"function",
+		"runner",
+		"task",
+		"typescript"
 	],
 	"homepage": "https://github.com/haltcase/run#readme",
 	"bugs": "https://github.com/haltcase/run/issues",
+	"license": "MIT",
+	"author": "Bo Lingen <bo@haltcase.dev> (https://haltcase.dev)",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/haltcase/run.git"
 	},
-	"license": "MIT",
-	"author": "Bo Lingen <bo@haltcase.dev> (https://haltcase.dev)",
-	"type": "module",
-	"exports": {
-		".": "./dist/index.js"
-	},
-	"main": "./dist/index.js",
-	"types": "./dist/index.d.ts",
 	"bin": {
-		"hr": "./dist/cli/bin.js"
+		"hr": "./dist/cli/bin.mjs"
 	},
 	"files": [
 		"dist"
 	],
-	"scripts": {
-		"build": "tsc -p tsconfig.build.json",
-		"build:watch": "tsc -p tsconfig.build.json --watch",
-		"eslint:check": "eslint src",
-		"format": "eslint --fix src && prettier src --write",
-		"hr": "tsx ./src/cli/bin.ts",
-		"prepack": "pnpm run build",
-		"prepare": "husky",
-		"prettier:check": "prettier --check src",
-		"test": "vitest",
-		"typescript:check": "tsc --noEmit && echo \"No errors reported by tsc.\""
-	},
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx,css,yml,yaml}": "pnpm prettier --write"
-	},
-	"prettier": "@haltcase/style/prettier",
-	"dependencies": {
-		"@favware/colorette-spinner": "^1.0.1",
-		"arktype": "^2.1.17",
-		"c12": "^3.0.3",
-		"cliui": "^9.0.1",
-		"colorette": "^2.0.20",
-		"execa": "^9.5.1"
-	},
-	"devDependencies": {
-		"@haltcase/style": "^7.3.1",
-		"@types/node": "^22.8.6",
-		"eslint": "^9.24.0",
-		"husky": "^9.1.7",
-		"lint-staged": "^15.5.1",
-		"prettier": "^3.5.3",
-		"tsx": "^4.19.3",
-		"typescript": "^5.8.3",
-		"vitest": "^3.1.1"
-	},
-	"packageManager": "pnpm@10.8.0",
-	"engines": {
-		"node": ">=22"
+	"type": "module",
+	"main": "./dist/index.mjs",
+	"types": "./dist/index.d.mts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
 	},
 	"publishConfig": {
 		"access": "public"
 	},
+	"scripts": {
+		"build": "vp pack",
+		"build:watch": "vp pack --watch",
+		"check": "pnpm eslint:check && vp check --no-lint",
+		"eslint:check": "eslint src",
+		"format": "eslint --fix src && vp fmt",
+		"hr": "tsx ./src/cli/bin.ts",
+		"prepack": "pnpm run build",
+		"prepare": "vp config",
+		"test": "vp test watch",
+		"types": "vp check --no-fmt --no-lint"
+	},
+	"dependencies": {
+		"@favware/colorette-spinner": "^1.0.1",
+		"arktype": "^2.2.0",
+		"c12": "^3.3.4",
+		"cliui": "^9.0.1",
+		"colorette": "^2.0.20",
+		"execa": "^9.6.1"
+	},
+	"devDependencies": {
+		"@arethetypeswrong/core": "^0.18.3",
+		"@haltcase/style": "^7.3.1",
+		"@types/node": "^24.13.1",
+		"@typescript/native-preview": "7.0.0-dev.20260608.1",
+		"eslint": "^9.39.4",
+		"oxlint-tsgolint": "^0.23.0",
+		"prettier": "^3.8.4",
+		"tsx": "^4.22.4",
+		"typescript": "^6.0.3",
+		"vite": "catalog:",
+		"vite-plus": "catalog:",
+		"vitest": "catalog:"
+	},
+	"prettier": "@haltcase/style/prettier",
+	"engines": {
+		"node": ">=22"
+	},
+	"packageManager": "pnpm@11.5.2",
 	"haltcase.run": {
 		"taskDirectory": "./scripts",
 		"quiet": true

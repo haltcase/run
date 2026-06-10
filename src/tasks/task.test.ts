@@ -1,6 +1,6 @@
 import { type } from "arktype";
 import { red } from "colorette";
-import { expect, expectTypeOf, test } from "vitest";
+import { expect, expectTypeOf, test } from "vite-plus/test";
 
 import { taskUtilities } from "./executeTask.js";
 import { task } from "./task.js";
