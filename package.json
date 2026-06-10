@@ -42,7 +42,7 @@
 		"build:watch": "vp pack --watch",
 		"check": "pnpm eslint:check && vp check --no-lint",
 		"eslint:check": "eslint src",
-		"format": "eslint --fix src && vp fmt",
+		"format": "eslint --fix src && vp check --fix --no-lint",
 		"hr": "tsx ./src/cli/bin.ts",
 		"prepack": "pnpm run build",
 		"prepare": "vp config",
