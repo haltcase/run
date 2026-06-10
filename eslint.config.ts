@@ -1,25 +1,24 @@
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 
 import { getEslintConfig } from "@haltcase/style/eslint";
 
-const toPackagePath = (filePath: string) =>
-	fileURLToPath(new URL(filePath, import.meta.url));
+const toPackagePath = (filePath: string) => join(import.meta.dirname, filePath);
 
 const project = [toPackagePath("tsconfig.json")];
 
 export default [
 	{
-		ignores: ["scripts"],
+		ignores: ["scripts"]
 	},
 
 	...getEslintConfig({
 		node: true,
-		typescriptProject: project,
+		typescriptProject: project
 	}),
 
 	{
 		rules: {
-			"unicorn/no-process-exit": "off",
-		},
-	},
+			"unicorn/no-process-exit": "off"
+		}
+	}
 ];

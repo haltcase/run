@@ -1,5 +1,6 @@
-import { task } from "@haltcase/run";
 import { setTimeout } from "node:timers/promises";
+
+import { task } from "@haltcase/run";
 
 await Promise.resolve("top level await");
 
@@ -15,5 +16,5 @@ export const asynchronous = async () => {
 };
 
 export const hello = task(({ name }) => {
-	console.log(`Greetings from a *.ts file, ${name}!`);
+	console.log(`Greetings from a *.ts file, ${String(name)}!`);
 });
