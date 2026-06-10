@@ -47,6 +47,7 @@
 		"prepack": "pnpm run build",
 		"prepare": "vp config",
 		"test": "vp test watch",
+		"test:run": "vp test",
 		"types": "vp check --no-fmt --no-lint"
 	},
 	"dependencies": {
