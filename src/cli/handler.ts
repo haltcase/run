@@ -59,11 +59,9 @@ export const taskFileListHandler = (context: HelpContextFile): string => {
 		extensions.includes(extname(file))
 	);
 
-	const content = [
-		usage,
-		"Available task files:",
-		fileList.map((it) => `  ${it}`).join("\n")
-	].join("\n\n");
+	const content = [usage, "Available task files:", fileList.map((it) => `  ${it}`).join("\n")].join(
+		"\n\n"
+	);
 
 	return `${content}\n`;
 };
@@ -87,10 +85,7 @@ export const taskListHandler = (context: HelpContextScript): string => {
 
 	const taskListPaddingX = 2;
 	const nameColumnWidth =
-		Object.keys(config).reduce(
-			(previous, current) => Math.max(previous, current.length),
-			1
-		) +
+		Object.keys(config).reduce((previous, current) => Math.max(previous, current.length), 1) +
 		2 +
 		taskListPaddingX * 2;
 
@@ -103,8 +98,7 @@ export const taskListHandler = (context: HelpContextScript): string => {
 
 		if (isBrandedTask(value)) {
 			if (value.kind === "strictTask") {
-				const properties =
-					getSchemaProperties(value.schema) || gray("not available");
+				const properties = getSchemaProperties(value.schema) || gray("not available");
 
 				ui.div(
 					{

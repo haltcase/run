@@ -2,12 +2,7 @@ import type { ArkErrors, Type } from "arktype";
 import { type } from "arktype";
 import { red } from "colorette";
 
-import type {
-	BrandedTask,
-	BrandedTaskStrict,
-	DefaultOptionsInput,
-	Task
-} from "./types.js";
+import type { BrandedTask, BrandedTaskStrict, DefaultOptionsInput, Task } from "./types.js";
 
 const formatValidationIssues = (errors: ArkErrors): string =>
 	errors
@@ -28,8 +23,7 @@ const formatValidationIssues = (errors: ArkErrors): string =>
 				return `${prefix}: ${messageWithoutProperty}`;
 			}
 
-			const optionText =
-				propertyName === "_" ? "Positionals" : `--${propertyName}`;
+			const optionText = propertyName === "_" ? "Positionals" : `--${propertyName}`;
 
 			if (error.code === "predicate" && error.expected === "removed") {
 				return `${red(optionText)}: unknown option`;
@@ -60,14 +54,9 @@ task.strict = <const TShape>(
 	shape: type.validate<TShape>,
 	fn: Task<NoInfer<Type<type.infer<TShape>>["infer"]>>
 ): BrandedTaskStrict<Type<type.infer<TShape>>["inferIn"]> => {
-	const schema = defaultOptionsInput
-		.merge(type.raw(shape))
-		.onUndeclaredKey("reject");
+	const schema = defaultOptionsInput.merge(type.raw(shape)).onUndeclaredKey("reject");
 
-	const taskFunction: ReturnType<typeof task.strict<TShape>> = (
-		options,
-		utilities
-	) => {
+	const taskFunction: ReturnType<typeof task.strict<TShape>> = (options, utilities) => {
 		const validationResult = schema(options);
 
 		if (validationResult instanceof type.errors) {

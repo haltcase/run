@@ -116,17 +116,13 @@ test("task.strict: validates environment variables with the given schema", () =>
 	const fn = task.strict(
 		{
 			env: {
-				SOME_FLAG: type("string").pipe(
-					(value) => value.toLowerCase() === "true"
-				)
+				SOME_FLAG: type("string").pipe((value) => value.toLowerCase() === "true")
 			}
 		},
 		() => "ok"
 	);
 
-	expect(fn({ _: ["1"], env: { SOME_FLAG: "true" } }, taskUtilities)).toBe(
-		"ok"
-	);
+	expect(fn({ _: ["1"], env: { SOME_FLAG: "true" } }, taskUtilities)).toBe("ok");
 
 	expect(() => {
 		fn(
@@ -137,9 +133,7 @@ test("task.strict: validates environment variables with the given schema", () =>
 			},
 			taskUtilities
 		);
-	}).toThrow(
-		`${red("Environment variable 'SOME_FLAG'")}: must be a string (was missing)`
-	);
+	}).toThrow(`${red("Environment variable 'SOME_FLAG'")}: must be a string (was missing)`);
 });
 
 test("task.strict: validates options with the given schema", () => {
@@ -151,13 +145,9 @@ test("task.strict: validates options with the given schema", () => {
 		({ logLevel }) => logLevel
 	);
 
-	expect(
-		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)
-	).toBe(1);
+	expect(fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)).toBe(1);
 
-	expect(fn({ _: [], env: {}, startDate: "2532-10-10" }, taskUtilities)).toBe(
-		6
-	);
+	expect(fn({ _: [], env: {}, startDate: "2532-10-10" }, taskUtilities)).toBe(6);
 
 	expect(() => {
 		fn(
@@ -207,9 +197,7 @@ test("task.strict: accepts an existing schema type", () => {
 
 	const fn = task.strict(inputSchema, ({ logLevel }) => logLevel);
 
-	expect(
-		fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)
-	).toBe(1);
+	expect(fn({ _: [], env: {}, startDate: "2532-10-10", logLevel: 1 }, taskUtilities)).toBe(1);
 });
 
 test("task.strict: accepts nested types with morphs", () => {

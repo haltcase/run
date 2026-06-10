@@ -8,6 +8,4 @@ export interface ResultError<TError> {
 	error: TError;
 }
 
-export type Result<TValue, TError = Error> =
-	| ResultOk<TValue>
-	| ResultError<TError>;
+export type Result<TValue, TError = Error> = ResultOk<TValue> | ResultError<TError>;

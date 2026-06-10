@@ -50,9 +50,7 @@ export type DefaultOptionsInput = ParsedOptions & {
 
 export type TaskCollection = Partial<Record<string, Task>>;
 
-type MergePositionals<TOptions> = "_" extends keyof TOptions
-	? TOptions
-	: TOptions & ParsedOptions;
+type MergePositionals<TOptions> = "_" extends keyof TOptions ? TOptions : TOptions & ParsedOptions;
 
 type MergeEnvironment<TOptions> = "env" extends keyof TOptions
 	? TOptions

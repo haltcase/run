@@ -18,9 +18,7 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 	console.log(`stdout = ${String(stdout)}`);
 
 	const image = (await (
-		await fetch(
-			"https://fakerapi.it/api/v2/images?_quantity=1&width=48&height=48"
-		)
+		await fetch("https://fakerapi.it/api/v2/images?_quantity=1&width=48&height=48")
 	).json()) as any;
 
 	console.log(`Downloaded image (title = "${image.data[0].title}")`);
@@ -29,11 +27,7 @@ export const hello = task<HelloOptions>(async ({ name }, { $ }) => {
 		await $`mkdir ./image-data`;
 	} catch {}
 
-	await writeFile(
-		"./image-data/example.json",
-		JSON.stringify(image.data[0]),
-		"utf8"
-	);
+	await writeFile("./image-data/example.json", JSON.stringify(image.data[0]), "utf8");
 });
 
 export const test = task.strict(

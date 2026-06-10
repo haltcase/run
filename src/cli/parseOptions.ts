@@ -36,9 +36,7 @@ export const parseOptions = (args: string[]): ParsedOptions => {
 
 		if (token.kind === "option") {
 			if (reservedNames.has(token.name)) {
-				throw new Error(
-					`Reserved name '${token.name}' cannot be used as option`
-				);
+				throw new Error(`Reserved name '${token.name}' cannot be used as option`);
 			}
 
 			if (index + 1 < tokens.length) {
@@ -52,9 +50,7 @@ export const parseOptions = (args: string[]): ParsedOptions => {
 				options[token.name] = next.value;
 				index++;
 			} else {
-				throw new Error(
-					`Expected option ${token.rawName} to be followed by a value`
-				);
+				throw new Error(`Expected option ${token.rawName} to be followed by a value`);
 			}
 		}
 

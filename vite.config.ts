@@ -28,6 +28,6 @@ export default defineConfig({
 		}
 	},
 	staged: {
-		"*.{js,jsx,ts,tsx,css,yml,yaml}": "pnpm prettier --write"
+		"*.{js,jsx,ts,tsx,css,yml,yaml}": "pnpm format"
 	}
 });

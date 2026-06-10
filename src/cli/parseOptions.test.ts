@@ -4,17 +4,7 @@ import { parseOptions } from "./parseOptions.js";
 
 test("parseOptions: parses options as key/value and returns positionals", () => {
 	expect(
-		parseOptions([
-			"--file",
-			"readme.md",
-			"--dryRun",
-			"true",
-			"you",
-			"spin",
-			"me",
-			"right",
-			"round"
-		])
+		parseOptions(["--file", "readme.md", "--dryRun", "true", "you", "spin", "me", "right", "round"])
 	).toStrictEqual({
 		_: ["you", "spin", "me", "right", "round"],
 		file: "readme.md",
@@ -29,8 +19,7 @@ test("parseOptions: expects all options to have values", () => {
 });
 
 test("parseOptions: returns everything after terminator as positionals", () => {
-	expect(parseOptions(["--color", "blue", "--", "--name", "-aBcDeF"]))
-		.toMatchInlineSnapshot(`
+	expect(parseOptions(["--color", "blue", "--", "--name", "-aBcDeF"])).toMatchInlineSnapshot(`
 		{
 		  "_": [
 		    "--name",

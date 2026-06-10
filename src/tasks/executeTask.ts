@@ -16,10 +16,7 @@ export const taskUtilities = {
 	exec: execaInherited
 } satisfies TaskUtilities;
 
-export const executeTask = async (
-	context: MainContextWithData,
-	options: ParsedOptions
-) => {
+export const executeTask = async (context: MainContextWithData, options: ParsedOptions) => {
 	const taskFunction = context.taskFile.data.config[context.taskName];
 	const specifier = `${context.taskFile.name}::${context.taskName}`;
 

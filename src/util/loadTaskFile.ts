@@ -7,9 +7,10 @@ import type { MainContext } from "../cli/main.js";
 import type { TaskCollection } from "../tasks/types.js";
 import type { Result } from "./result.js";
 
-export type ResolvedConfigWithFile<
-	T extends UserInputConfig = UserInputConfig
-> = Omit<ResolvedConfig<T>, "configFile"> & {
+export type ResolvedConfigWithFile<T extends UserInputConfig = UserInputConfig> = Omit<
+	ResolvedConfig<T>,
+	"configFile"
+> & {
 	configFile: NonNullable<ResolvedConfig<T>["configFile"]>;
 };
 
