@@ -29,6 +29,6 @@ export default defineConfig({
 		}
 	},
 	staged: {
-		"*.{js,jsx,ts,tsx,css,yml,yaml}": "pnpm format"
+		"*.{js,jsx,ts,tsx,css,yml,yaml}": ["eslint --fix", "vp check --fix --no-lint"]
 	}
 });
