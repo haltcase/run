@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join } from "node:path";
 
 import { SUPPORTED_EXTENSIONS } from "c12";
 
@@ -11,7 +11,7 @@ export const extensions = SUPPORTED_EXTENSIONS.filter(
 
 export const resolveTaskFile = (context: MainContext): string | string[] => {
 	if (context.taskFile.ext) {
-		return resolve(context.taskFile.dir, context.taskFile.name);
+		return context.taskFile.path;
 	}
 
 	const foundConfigs = extensions
