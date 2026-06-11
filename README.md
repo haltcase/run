@@ -278,6 +278,28 @@ for example:
 }
 ```
 
+#### TypeScript module loader
+
+By default, TypeScript files are executed using Node.js' built-in type-stripping
+loader before falling back to [Jiti](https://github.com/unjs/jiti), which
+supports additional features like
+[`tsconfig.json#paths`](https://www.typescriptlang.org/tsconfig#paths).
+
+Jiti has a non-negligible install size and startup time, so if you know you
+don't need its features, you may be able to use your package manager to disable
+it. For example, with pnpm:
+
+```yaml
+# pnpm-workspace.yaml
+
+# https://pnpm.io/settings#overrides
+overrides:
+	"@haltcase/run>jiti": "-"
+```
+
+Note that doing so may result in script execution errors if you do use features
+not supported by Node.js natively.
+
 ## API
 
 ### Option parsing

@@ -70,13 +70,8 @@
 		"vite-plus": "catalog:",
 		"vitest": "catalog:"
 	},
-	"peerDependencies": {
+	"optionalDependencies": {
 		"jiti": "^2.7.0"
-	},
-	"peerDependenciesMeta": {
-		"jiti": {
-			"optional": true
-		}
 	},
 	"engines": {
 		"node": ">=22"
