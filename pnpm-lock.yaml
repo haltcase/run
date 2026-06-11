@@ -18,9 +18,6 @@ importers:
 
   .:
     dependencies:
-      '@favware/colorette-spinner':
-        specifier: ^1.0.1
-        version: 1.0.1
       arktype:
         specifier: ^2.2.0
         version: 2.2.0
@@ -30,9 +27,6 @@ importers:
       cliui:
         specifier: ^9.0.1
         version: 9.0.1
-      colorette:
-        specifier: ^2.0.20
-        version: 2.0.20
       execa:
         specifier: ^9.6.1
         version: 9.6.1
@@ -454,10 +448,6 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@favware/colorette-spinner@1.0.1':
-    resolution: {integrity: sha512-PPYtcLzhSafdylp8NBOxMCYIcLqTUMNiQc7ciBoAIvxNG2egM+P7e2nNPui5+Svyk89Q+Tnbrp139ZRIIBw3IA==}
-    engines: {node: '>=v16'}
 
   '@haltcase/style@7.3.1':
     resolution: {integrity: sha512-wa8glEEKoCnfVlU3dTQl5QoCQvpq6ODSE+0DYFayfGHMGYOb7dxvubJQdYcHsr0muN+M1HuSSlhFDDNJi3IkyA==}
@@ -1448,9 +1438,6 @@ packages:
 
   colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
-
-  colorette@2.0.20:
-    resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
 
   comment-parser@1.4.1:
     resolution: {integrity: sha512-buhp5kePrmda3vhc5B9t7pUQXAb2Tnd0qgpkIhPhkHXxJpiPJ11H0ZEU0oBpJ2QztSbzG/ZxMj/CHsYJqRHmyg==}
@@ -3994,10 +3981,6 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@favware/colorette-spinner@1.0.1':
-    dependencies:
-      colorette: 2.0.20
-
   '@haltcase/style@7.3.1(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.29.1(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3))(eslint@9.39.4(jiti@2.7.0)))(eslint@9.39.4(jiti@2.7.0))(prettier-plugin-astro@0.12.3)(prettier@3.8.4)(stylelint@16.10.0(typescript@6.0.3))(tailwindcss@4.1.3)(ts-api-utils@2.1.0(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
       '@babel/core': 7.26.10
@@ -4829,8 +4812,6 @@ snapshots:
   color-name@1.1.4: {}
 
   colord@2.9.3: {}
-
-  colorette@2.0.20: {}
 
   comment-parser@1.4.1: {}
 

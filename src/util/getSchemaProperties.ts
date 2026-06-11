@@ -1,5 +1,6 @@
+import { styleText } from "node:util";
+
 import { type Type, type } from "arktype";
-import { dim } from "colorette";
 
 import { reservedNames } from "../cli/parseOptions.js";
 
@@ -42,7 +43,7 @@ export const getSchemaProperties = (schema: Type): string => {
 		.filter(({ key }) => !reservedNames.has(key))
 		.map(({ key, isOptional }) => {
 			if (isOptional) {
-				return dim(`[${key}]`);
+				return styleText("dim", `[${key}]`);
 			}
 
 			return key;

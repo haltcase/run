@@ -1,5 +1,6 @@
+import { styleText } from "node:util";
+
 import { type } from "arktype";
-import { red } from "colorette";
 import { expect, expectTypeOf, test } from "vite-plus/test";
 
 import { taskUtilities } from "./executeTask.js";
@@ -133,7 +134,9 @@ test("task.strict: validates environment variables with the given schema", () =>
 			},
 			taskUtilities
 		);
-	}).toThrow(`${red("Environment variable 'SOME_FLAG'")}: must be a string (was missing)`);
+	}).toThrow(
+		`${styleText("red", "Environment variable 'SOME_FLAG'")}: must be a string (was missing)`
+	);
 });
 
 test("task.strict: validates options with the given schema", () => {
@@ -158,7 +161,7 @@ test("task.strict: validates options with the given schema", () => {
 			},
 			taskUtilities
 		);
-	}).toThrow(`${red("--startDate")}: must be a string (was missing)`);
+	}).toThrow(`${styleText("red", "--startDate")}: must be a string (was missing)`);
 
 	expect(() => {
 		fn(
@@ -170,7 +173,7 @@ test("task.strict: validates options with the given schema", () => {
 			},
 			taskUtilities
 		);
-	}).toThrow(`${red("--logLevel")}: must be non-negative (was `);
+	}).toThrow(`${styleText("red", "--logLevel")}: must be non-negative (was `);
 });
 
 test("task.strict: rejects undeclared options", () => {
@@ -186,7 +189,7 @@ test("task.strict: rejects undeclared options", () => {
 			},
 			taskUtilities
 		);
-	}).toThrow(`${red("--undeclared")}: unknown option`);
+	}).toThrow(`${styleText("red", "--undeclared")}: unknown option`);
 });
 
 test("task.strict: accepts an existing schema type", () => {

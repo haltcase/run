@@ -51,11 +51,9 @@
 		"types": "vp check --no-fmt --no-lint"
 	},
 	"dependencies": {
-		"@favware/colorette-spinner": "^1.0.1",
 		"arktype": "^2.2.0",
 		"c12": "^3.3.4",
 		"cliui": "^9.0.1",
-		"colorette": "^2.0.20",
 		"execa": "^9.6.1"
 	},
 	"devDependencies": {

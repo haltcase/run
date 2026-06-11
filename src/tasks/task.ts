@@ -1,6 +1,7 @@
+import { styleText } from "node:util";
+
 import type { ArkErrors, Type } from "arktype";
 import { type } from "arktype";
-import { red } from "colorette";
 
 import type { BrandedTask, BrandedTaskStrict, DefaultOptionsInput, Task } from "./types.js";
 
@@ -19,18 +20,18 @@ const formatValidationIssues = (errors: ArkErrors): string =>
 				: error.message;
 
 			if (propertyName === "env") {
-				const prefix = red(`Environment variable '${String(error.path[1])}'`);
+				const prefix = styleText("red", `Environment variable '${String(error.path[1])}'`);
 				return `${prefix}: ${messageWithoutProperty}`;
 			}
 
 			const optionText = propertyName === "_" ? "Positionals" : `--${propertyName}`;
 
 			if (error.code === "predicate" && error.expected === "removed") {
-				return `${red(optionText)}: unknown option`;
+				return `${styleText("red", optionText)}: unknown option`;
 			}
 
 			// we currently assume there is only ever one path segment
-			return `${red(optionText)}: ${messageWithoutProperty}`;
+			return `${styleText("red", optionText)}: ${messageWithoutProperty}`;
 		})
 		.join("\n");
 

@@ -1,15 +1,15 @@
 import { readdirSync } from "node:fs";
 import { extname } from "node:path";
+import { styleText } from "node:util";
 
-import { Spinner } from "@favware/colorette-spinner";
 import cliui from "cliui";
-import { bold, gray, yellow } from "colorette";
 
 import type { AppConfig } from "../config.js";
 import { isBrandedTask } from "../tasks/guards.js";
 import { getSchemaProperties } from "../util/getSchemaProperties.js";
 import { extensions } from "../util/resolveTaskFile.js";
 import type { MainContextWithData } from "./main.js";
+import { Spinner } from "./spinner.js";
 
 export const failWith = (spinner: Spinner, message: unknown): never => {
 	let text: string | undefined;
@@ -33,7 +33,7 @@ export const write = (message: string) => {
 	process.stdout.write(`${message}\n`);
 };
 
-const usage = `Usage: ${yellow("hr")} <taskFile> [task]`;
+const usage = `Usage: ${styleText("yellow", "hr")} <taskFile> [task]`;
 
 interface HelpContextCommand {
 	command: string;
@@ -94,11 +94,11 @@ export const taskListHandler = (context: HelpContextScript): string => {
 			continue;
 		}
 
-		const formattedName = bold(name);
+		const formattedName = styleText("bold", name);
 
 		if (isBrandedTask(value)) {
 			if (value.kind === "strictTask") {
-				const properties = getSchemaProperties(value.schema) || gray("not available");
+				const properties = getSchemaProperties(value.schema) || styleText("gray", "not available");
 
 				ui.div(
 					{
