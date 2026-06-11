@@ -1,6 +1,6 @@
 {
 	"name": "@haltcase/run",
-	"version": "5.0.0-beta.2",
+	"version": "5.0.0",
 	"description": "Flexible, function-based task runner where command line options are props",
 	"keywords": [
 		"arktype",
