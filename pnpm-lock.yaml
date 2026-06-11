@@ -22,8 +22,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       c12:
-        specifier: ^3.3.4
-        version: 3.3.4
+        specifier: ^4.0.0-beta.5
+        version: 4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.2.0)(jiti@2.7.0)
       cliui:
         specifier: ^9.0.1
         version: 9.0.1
@@ -46,6 +46,9 @@ importers:
       eslint:
         specifier: ^9.39.4
         version: 9.39.4(jiti@2.7.0)
+      jiti:
+        specifier: ^2.7.0
+        version: 2.7.0
       oxlint-tsgolint:
         specifier: ^0.23.0
         version: 0.23.0
@@ -1372,11 +1375,23 @@ packages:
     resolution: {integrity: sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==}
     engines: {node: '>=6'}
 
-  c12@3.3.4:
-    resolution: {integrity: sha512-cM0ApFQSBXuourJejzwv/AuPRvAxordTyParRVcHjjtXirtkzM0uK2L9TTn9s0cXZbG7E55jCivRQzoxYmRAlA==}
+  c12@4.0.0-beta.5:
+    resolution: {integrity: sha512-yWGCPCQGJeFq4R0mFg5HOhC3Rg+B0PCdM+ldXWUhughoGgeeq8/tjRmXh4/lmhKWyhf+KOFxB/JMXf0Yv1Fd5A==}
     peerDependencies:
+      chokidar: ^5
+      dotenv: '*'
+      giget: '*'
+      jiti: '*'
       magicast: '*'
     peerDependenciesMeta:
+      chokidar:
+        optional: true
+      dotenv:
+        optional: true
+      giget:
+        optional: true
+      jiti:
+        optional: true
       magicast:
         optional: true
 
@@ -2721,9 +2736,6 @@ packages:
     resolution: {integrity: sha512-AWGB9WFcRXOQs48Z/udjI5ZcZMHXwX8XPByNpOydgcGsDLIzjGizhoMWJyKAWze7AVW/2W1i+/gPX4YtKe5cyg==}
     engines: {node: '>=12.20.0'}
 
-  ohash@2.0.11:
-    resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
-
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -2815,9 +2827,6 @@ packages:
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
-
-  perfect-debounce@2.1.0:
-    resolution: {integrity: sha512-LjgdTytVFXeUgtHZr9WYViYSM/g8MkcTPYDlPa3cDqMirHjKiSZPYd6DoL7pK8AJQr+uWkQvCjHNdiMqsrJs+g==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -4736,20 +4745,19 @@ snapshots:
 
   builtin-modules@3.3.0: {}
 
-  c12@3.3.4:
+  c12@4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.2.0)(jiti@2.7.0):
     dependencies:
-      chokidar: 5.0.0
       confbox: 0.2.4
       defu: 6.1.7
-      dotenv: 17.4.2
       exsolve: 1.0.8
-      giget: 3.2.0
-      jiti: 2.7.0
-      ohash: 2.0.11
       pathe: 2.0.3
-      perfect-debounce: 2.1.0
       pkg-types: 2.3.1
       rc9: 3.0.1
+    optionalDependencies:
+      chokidar: 5.0.0
+      dotenv: 17.4.2
+      giget: 3.2.0
+      jiti: 2.7.0
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -4790,6 +4798,7 @@ snapshots:
   chokidar@5.0.0:
     dependencies:
       readdirp: 5.0.0
+    optional: true
 
   ci-info@4.2.0: {}
 
@@ -4953,7 +4962,8 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
 
-  dotenv@17.4.2: {}
+  dotenv@17.4.2:
+    optional: true
 
   dunder-proto@1.0.1:
     dependencies:
@@ -5767,7 +5777,8 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  giget@3.2.0: {}
+  giget@3.2.0:
+    optional: true
 
   git-hooks-list@3.1.0: {}
 
@@ -6338,8 +6349,6 @@ snapshots:
 
   obug@2.1.2: {}
 
-  ohash@2.0.11: {}
-
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -6456,8 +6465,6 @@ snapshots:
 
   pathe@2.0.3: {}
 
-  perfect-debounce@2.1.0: {}
-
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -6572,7 +6579,8 @@ snapshots:
       parse-json: 5.2.0
       type-fest: 0.6.0
 
-  readdirp@5.0.0: {}
+  readdirp@5.0.0:
+    optional: true
 
   refa@0.12.1:
     dependencies:

@@ -24,7 +24,10 @@ export const loadTaskFile = async (
 			configFile: context.taskFile.base,
 			dotenv: false,
 			rcFile: false,
-			packageJson: false
+			packageJson: false,
+			jitiOptions: {
+				tsconfigPaths: true
+			}
 		});
 
 		if (!collection.configFile || collection.layers?.length === 0) {
