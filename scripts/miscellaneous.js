@@ -9,8 +9,8 @@ export const error = () => {
 };
 
 export const asynchronous = async () => {
-	await setTimeout(1000);
-	console.log("Asynchronous tasks are 👌");
+	await setTimeout(1_000);
+	console.log("Asynchronous *.js tasks are 👌");
 };
 
 export const hello = ({ name }) => {

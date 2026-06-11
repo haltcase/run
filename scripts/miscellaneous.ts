@@ -11,8 +11,17 @@ export const error = () => {
 };
 
 export const asynchronous = async () => {
-	await setTimeout(1000);
-	console.log("Asynchronous tasks are 👌");
+	console.log("This task will take a while...");
+	await setTimeout(1_000);
+	console.log("Yeah, we're still waiting...");
+	await setTimeout(1_000);
+	console.log("It will be done soon...");
+	await setTimeout(1_000);
+	console.log("Checking...");
+	await setTimeout(1_000);
+	console.log("Almost there...");
+	await setTimeout(1_000);
+	console.log("Asynchronous *.ts tasks are 👌");
 };
 
 export const hello = task(({ name }) => {
